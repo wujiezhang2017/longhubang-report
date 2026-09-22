@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>越秀中山五营服龙虎榜</title>
+<style>
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+    background: linear-gradient(135deg, #0a0e1a 0%, #0d1b2a 50%, #0a1525 100%);
+    color: #e0e6ed; min-height: 100vh; padding: 20px;
+}
+.container { max-width: 1400px; margin: 0 auto; padding-bottom: 60px; }
+
+/* ===== 标题区 ===== */
+.header { padding: 30px 20px 20px; text-align: center; }
+.title-wrap { display: inline-flex; flex-direction: column; align-items: stretch; max-width: 100%; }
+.header h1 {
+    font-size: 44px; font-weight: 800; letter-spacing: 6px; margin: 0;
+    background: linear-gradient(135deg, #00d4ff, #0099ff, #00d4ff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+    white-space: nowrap;
+}
+/* 发光横线: 标题下方，与文字左右对齐 */
+.header .glow-line {
+    width: 100%; height: 3px; margin-top: 10px;
+    background: linear-gradient(90deg, transparent, #00d4ff 10%, #00d4ff 90%, transparent);
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
+}
+.timestamps { display: flex; justify-content: center; gap: 30px; font-size: 14px; color: #8aa0b8; margin-top: 12px; }
+.timestamps span {
+    background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3);
+    padding: 6px 18px; border-radius: 20px;
+}
+.timestamps span::before {
+    content: ''; display: inline-block; width: 8px; height: 8px;
+    border-radius: 50%; background: #00d4ff; margin-right: 8px; box-shadow: 0 0 8px #00d4ff;
+}
+
+/* ===== 通用 section ===== */
+.section { margin-bottom: 36px; }
+.section-title {
+    font-size: 20px; font-weight: 700; color: #00d4ff; margin-bottom: 16px;
+    padding-left: 14px; border-left: 4px solid #00d4ff;
+    display: flex; align-items: center; gap: 10px;
+}
+.section-title::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(0,212,255,0.3), transparent);
+}
+.section-sub { font-size: 13px; font-weight: 400; color: #8aa0b8; white-space: nowrap; }
+
+/* ===== 排名区 ===== */
+.tab-switcher { display: flex; gap: 12px; margin-bottom: 20px; }
+.tab-btn {
+    padding: 10px 32px; border: 1px solid rgba(0, 212, 255, 0.3);
+    background: rgba(0, 212, 255, 0.05); color: #8aa0b8;
+    border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.3s;
+}
+.tab-btn:hover { background: rgba(0, 212, 255, 0.15); color: #00d4ff; }
+.tab-btn.active {
+    background: linear-gradient(135deg, #00d4ff, #0099ff); color: #0a0e1a;
+    border-color: #00d4ff; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+.rank-panel { display: none; }
+.rank-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rank-card {
+    background: rgba(13, 27, 42, 0.6); border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 12px; padding: 20px; backdrop-filter: blur(10px); transition: all 0.3s;
+}
+.rank-card:hover { border-color: rgba(0, 212, 255, 0.4); box-shadow: 0 0 20px rgba(0, 212, 255, 0.1); }
+.rank-card-title { font-size: 16px; font-weight: 700; color: #00d4ff; margin-bottom: 16px; text-align: center; }
+.top-card { border-color: rgba(255, 215, 0, 0.2); }
+.bottom-card { border-color: rgba(255, 71, 87, 0.2); }
+
+.top3-list { display: flex; flex-direction: column; gap: 10px; }
+.top3-item {
+    display: flex; align-items: center; gap: 16px; padding: 14px 18px;
+    border-radius: 10px; transition: all 0.3s; min-height: 56px;
+}
+.top3-item:hover { transform: translateX(4px); }
+.top3-item.gold { background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.05)); border: 1px solid rgba(255,215,0,0.4); }
+.top3-item.silver { background: linear-gradient(135deg, rgba(192,192,192,0.15), rgba(192,192,192,0.03)); border: 1px solid rgba(192,192,192,0.3); }
+.top3-item.bronze { background: linear-gradient(135deg, rgba(205,127,50,0.15), rgba(205,127,50,0.03)); border: 1px solid rgba(205,127,50,0.3); }
+.top3-rank {
+    font-size: 36px; font-weight: 900; line-height: 1; min-width: 44px; text-align: center;
+    flex-shrink: 0;
+}
+.gold .top3-rank { color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.5); }
+.silver .top3-rank { color: #c0c0c0; }
+.bronze .top3-rank { color: #cd7f32; }
+.top3-info { flex: 1; }
+.top3-name { font-size: 18px; font-weight: 700; color: #e0e6ed; margin-bottom: 2px; }
+.top3-value { font-size: 16px; font-weight: 600; color: #8aa0b8; }
+
+.bottom-list { display: flex; flex-direction: column; gap: 8px; }
+.bottom-item {
+    display: flex; align-items: center; gap: 12px; padding: 8px 12px;
+    background: rgba(255, 71, 87, 0.08); border-radius: 6px; border-left: 3px solid rgba(255, 71, 87, 0.5);
+}
+.bottom-rank { font-size: 13px; font-weight: 700; color: #ff6b7a; min-width: 42px; }
+.bottom-name { font-size: 14px; flex: 1; color: #d0d8e0; }
+.bottom-value { font-size: 14px; font-weight: 600; color: #ff6b7a; }
+
+/* ===== 详情表 ===== */
+.data-scroll {
+    overflow-x: auto; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.15);
+    background: rgba(13, 27, 42, 0.4); max-width: 100%;
+}
+.data-scroll::-webkit-scrollbar { height: 8px; }
+.data-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+.data-scroll::-webkit-scrollbar-thumb { background: rgba(0, 212, 255, 0.3); border-radius: 4px; }
+.data-table {
+    width: 100%; border-collapse: collapse; font-size: 14px; min-width: 1100px;
+}
+.data-table th {
+    background: rgba(0, 212, 255, 0.12); color: #00d4ff; padding: 12px 14px;
+    text-align: center; font-weight: 700; border-bottom: 2px solid rgba(0, 212, 255, 0.3); white-space: nowrap;
+}
+.data-table td {
+    padding: 10px 14px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); white-space: nowrap;
+}
+.data-table tr:hover td { background: rgba(0, 212, 255, 0.12); }
+.data-table tr:hover td.name-cell { background: rgba(0, 212, 255, 0.15); }
+.data-table tr:hover td.type-col { background: rgba(0, 153, 255, 0.15); }
+.daily-table tr:hover td { background: rgba(0, 212, 255, 0.12); }
+.daily-table tr:hover td.has-data { background: rgba(46, 213, 115, 0.18); }
+.name-cell { font-weight: 600; color: #ffffff; text-align: left !important; padding-left: 20px !important; }
+.highlight-cell { color: #ffd700; font-weight: 700; }
+.type-cell { font-weight: 700; text-align: center; font-size: 14px; vertical-align: middle; }
+.type-cell-pq { color: #ffffff; }
+.type-cell-zw { color: #ff9f43; }
+.name-pq { color: #ffffff; }
+.name-zw { color: #ff9f43; }
+.total-pq { color: #ffffff; }
+.total-zw { color: #ff9f43; }
+.type-col { width: 40px; min-width: 40px; }
+.data-table th.type-col { padding: 12px 2px; }
+.data-table td.type-col { padding: 10px 2px; }
+td.type-cell-pq, td.type-cell-zw {
+    writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 6px;
+}
+.data-table th.type-col { position: sticky; left: 0; z-index: 3; background: #0b3242; }
+.data-table th.name-head { position: sticky; left: 40px; z-index: 3; background: #0b3242; }
+.data-table td.type-col { position: sticky; left: 0; z-index: 2; background: rgba(18, 36, 58, 0.98); }
+.data-table td.name-cell { position: sticky; left: 40px; z-index: 2; background: rgba(18, 36, 58, 0.98); }
+.data-table td.summary-type { position: sticky; left: 0; z-index: 2; background: #0d3043; }
+.summary-row td {
+    background: rgba(0, 212, 255, 0.1); font-weight: 700; color: #00d4ff;
+    border-top: 2px solid rgba(0, 212, 255, 0.3);
+}
+.summary-type { color: #00d4ff; }
+
+/* ===== 破零状态 ===== */
+.zb-group { margin-bottom: 20px; }
+.zb-group-title {
+    font-size: 15px; font-weight: 700; color: #0099ff; margin-bottom: 10px;
+    padding-left: 10px; border-left: 3px solid #0099ff;
+}
+.zb-badges { display: flex; flex-wrap: wrap; gap: 10px; }
+.zb-badge {
+    display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+    border-radius: 8px; font-size: 14px; transition: all 0.3s;
+}
+.zb-badge:hover { transform: scale(1.05); }
+.zb-good { background: rgba(46, 213, 115, 0.15); border: 1px solid rgba(46, 213, 115, 0.4); }
+.zb-good .zb-days { color: #2ed573; font-weight: 700; }
+.zb-warn { background: rgba(255, 165, 2, 0.15); border: 1px solid rgba(255, 165, 2, 0.4); }
+.zb-warn .zb-days { color: #ffa502; font-weight: 700; }
+.zb-bad { background: rgba(255, 71, 87, 0.15); border: 1px solid rgba(255, 71, 87, 0.4); }
+.zb-bad .zb-days { color: #ff4757; font-weight: 700; }
+.zb-name { color: #e0e6ed; font-weight: 600; }
+
+/* ===== 日破零表格 ===== */
+.daily-scroll {
+    overflow-x: auto; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.15);
+    background: rgba(13, 27, 42, 0.4); max-width: 100%;
+}
+.daily-scroll::-webkit-scrollbar { height: 8px; }
+.daily-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+.daily-scroll::-webkit-scrollbar-thumb { background: rgba(0, 212, 255, 0.3); border-radius: 4px; }
+.daily-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0, 212, 255, 0.5); }
+.daily-table {
+    border-collapse: collapse; font-size: 14px; white-space: nowrap; table-layout: fixed; width: 100%;
+}
+.daily-table th, .daily-table td { padding: 8px 6px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.daily-table thead th { position: sticky; top: 0; z-index: 1; background: rgba(0, 153, 255, 0.2); color: #00d4ff; font-weight: 700; }
+
+/* 冻结列: 类型 + 姓名 + 合计 */
+.daily-table .col-type {
+    position: sticky; left: 0; z-index: 2;
+    background: rgba(13, 27, 42, 0.98); width: 40px; vertical-align: middle;
+}
+.daily-table .col-name {
+    position: sticky; left: 40px; z-index: 2;
+    background: rgba(13, 27, 42, 0.98); width: 80px;
+}
+.daily-table .col-total {
+    position: sticky; left: 120px; z-index: 2;
+    background: rgba(13, 27, 42, 0.98); width: 56px;
+}
+.daily-table thead .col-type { position: sticky; top: 0; left: 0; z-index: 4; background: #0a3a62; }
+.daily-table thead .col-name { position: sticky; top: 0; left: 40px; z-index: 4; background: #0a3a62; }
+.daily-table thead .col-total { position: sticky; top: 0; left: 120px; z-index: 4; background: #0a3a62; }
+.daily-table .col-name { font-weight: 600; text-align: center; }
+.daily-table thead .col-name { color: #00d4ff; }
+.col-total { font-weight: 700; text-align: center; }
+.daily-table thead .col-total { color: #ffd700; }
+.col-day { width: auto; }
+.has-data { color: #2ed573; font-weight: 600; background: rgba(46, 213, 115, 0.08); }
+.no-data { color: rgba(255,255,255,0.15); }
+.red-alert { background: rgba(255, 71, 87, 0.15) !important; color: #ff4757; }
+.daily-table tr:hover td.red-alert { background: rgba(255, 71, 87, 0.28) !important; }
+
+/* ===== 图例 ===== */
+.legend { display: flex; gap: 16px; margin-top: 10px; font-size: 12px; color: #8aa0b8; justify-content: flex-end; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+@media (max-width: 768px) {
+    body { padding: 12px; }
+    .container { padding-bottom: 40px; }
+    .header { padding: 20px 10px 14px; }
+    .header h1 { font-size: 24px; letter-spacing: 3px; }
+    .timestamps { flex-wrap: wrap; gap: 8px; font-size: 12px; }
+    .timestamps span { padding: 4px 12px; }
+    .section { margin-bottom: 22px; }
+    .section-title { font-size: 16px; flex-wrap: wrap; }
+    .section-sub { font-size: 11px; }
+    .tab-btn { padding: 8px 18px; font-size: 13px; }
+    .rank-panel.active { grid-template-columns: 1fr; }
+    .rank-card { padding: 14px; }
+    .top3-item { padding: 10px 12px; gap: 10px; min-height: 48px; }
+    .top3-rank { font-size: 26px; min-width: 32px; }
+    .top3-name { font-size: 15px; }
+    .top3-value { font-size: 13px; }
+    .data-table, .daily-table { font-size: 12px; }
+    .data-table th { padding: 8px 8px; }
+    .data-table td { padding: 8px 8px; }
+    .daily-table th, .daily-table td { padding: 6px 4px; }
+    td.type-cell-pq, td.type-cell-zw { letter-spacing: 4px; font-size: 12px; }
+    .zb-badge { padding: 6px 10px; font-size: 12px; }
+    .zb-badges { gap: 6px; }
+    .legend { justify-content: flex-start; flex-wrap: wrap; }
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+
+    <!-- 标题 -->
+    <div class="header">
+        <div class="title-wrap">
+        <h1>越秀中山五营服龙虎榜</h1>
+        <div class="glow-line"></div>
+        </div>
+        <div class="timestamps">
+            <span>竣工时间: 2026-09-20</span>
+            <span>531时间: 2026-09-22</span>
+        </div>
+    </div>
+
+    <!-- 排名区 -->
+    <div class="section">
+        <div class="section-title">龙虎排名<span class="section-sub">（竣工时间: 2026-09-20，仅统计划小越秀）</span></div>
+        <div class="tab-switcher">
+            <button class="tab-btn active" onclick="switchTab('value')">价值积分</button>
+            <button class="tab-btn" onclick="switchTab('gaotao')">增存高套</button>
+        </div>
+        <div class="rank-panel active" id="panel-value">
+            <div class="rank-card top-card"><div class="rank-card-title">片区经理 · 前三名</div><div class="top3-list"><div class="top3-item gold">
+                    <div class="top3-rank">1</div>
+                    <div class="top3-info">
+                        <div class="top3-name">欧乐东</div>
+                        <div class="top3-value">1814.93</div>
+                    </div>
+                </div><div class="top3-item silver">
+                    <div class="top3-rank">2</div>
+                    <div class="top3-info">
+                        <div class="top3-name">黎汉生</div>
+                        <div class="top3-value">1594.66</div>
+                    </div>
+                </div><div class="top3-item bronze">
+                    <div class="top3-rank">3</div>
+                    <div class="top3-info">
+                        <div class="top3-name">欧阳滔</div>
+                        <div class="top3-value">802.41</div>
+                    </div>
+                </div></div></div><div class="rank-card top-card"><div class="rank-card-title">装维 · 前三名</div><div class="top3-list"><div class="top3-item gold">
+                    <div class="top3-rank">1</div>
+                    <div class="top3-info">
+                        <div class="top3-name">温桂荣</div>
+                        <div class="top3-value">1176.74</div>
+                    </div>
+                </div><div class="top3-item silver">
+                    <div class="top3-rank">2</div>
+                    <div class="top3-info">
+                        <div class="top3-name">周辉</div>
+                        <div class="top3-value">1127.16</div>
+                    </div>
+                </div><div class="top3-item bronze">
+                    <div class="top3-rank">3</div>
+                    <div class="top3-info">
+                        <div class="top3-name">刘建河</div>
+                        <div class="top3-value">388.66</div>
+                    </div>
+                </div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">片区经理 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">周艳婷</span><span class="bottom-value">427.49</span></div><div class="bottom-item"><span class="bottom-rank">第7名</span><span class="bottom-name">凌伟全</span><span class="bottom-value">253.58</span></div><div class="bottom-item"><span class="bottom-rank">第8名</span><span class="bottom-name">莫卓希</span><span class="bottom-value">0</span></div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">装维 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第4名</span><span class="bottom-name">陈永恒</span><span class="bottom-value">160.51</span></div><div class="bottom-item"><span class="bottom-rank">第5名</span><span class="bottom-name">沈钰洋</span><span class="bottom-value">136.33</span></div><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">陈学贤</span><span class="bottom-value">0</span></div></div></div>
+        </div>
+        <div class="rank-panel" id="panel-gaotao">
+            <div class="rank-card top-card"><div class="rank-card-title">片区经理 · 前三名</div><div class="top3-list"><div class="top3-item gold">
+                    <div class="top3-rank">1</div>
+                    <div class="top3-info">
+                        <div class="top3-name">黎汉生</div>
+                        <div class="top3-value">19.5</div>
+                    </div>
+                </div><div class="top3-item silver">
+                    <div class="top3-rank">2</div>
+                    <div class="top3-info">
+                        <div class="top3-name">欧乐东</div>
+                        <div class="top3-value">9.55</div>
+                    </div>
+                </div><div class="top3-item bronze">
+                    <div class="top3-rank">3</div>
+                    <div class="top3-info">
+                        <div class="top3-name">欧阳滔</div>
+                        <div class="top3-value">4</div>
+                    </div>
+                </div></div></div><div class="rank-card top-card"><div class="rank-card-title">装维 · 前三名</div><div class="top3-list"><div class="top3-item gold">
+                    <div class="top3-rank">1</div>
+                    <div class="top3-info">
+                        <div class="top3-name">周辉</div>
+                        <div class="top3-value">11</div>
+                    </div>
+                </div><div class="top3-item silver">
+                    <div class="top3-rank">2</div>
+                    <div class="top3-info">
+                        <div class="top3-name">温桂荣</div>
+                        <div class="top3-value">8</div>
+                    </div>
+                </div><div class="top3-item bronze">
+                    <div class="top3-rank">3</div>
+                    <div class="top3-info">
+                        <div class="top3-name">刘建河</div>
+                        <div class="top3-value">3.5</div>
+                    </div>
+                </div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">片区经理 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">周艳婷</span><span class="bottom-value">2.5</span></div><div class="bottom-item"><span class="bottom-rank">第7名</span><span class="bottom-name">凌伟全</span><span class="bottom-value">1.05</span></div><div class="bottom-item"><span class="bottom-rank">第8名</span><span class="bottom-name">莫卓希</span><span class="bottom-value">0</span></div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">装维 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第4名</span><span class="bottom-name">沈钰洋</span><span class="bottom-value">1.05</span></div><div class="bottom-item"><span class="bottom-rank">第5名</span><span class="bottom-name">陈永恒</span><span class="bottom-value">0.75</span></div><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">陈学贤</span><span class="bottom-value">0</span></div></div></div>
+        </div>
+    </div>
+
+    <!-- 详情表 -->
+    <div class="section">
+        <div class="section-title">团队成员数据详情<span class="section-sub">（竣工时间: 2026-09-20，仅统计划小越秀）</span></div>
+        <div class="data-scroll">
+        <table class="data-table">
+            <thead><tr>
+                <th class="type-col">类型</th>
+                <th class="name-head">姓名</th>
+                <th>价值积分</th><th>序列内排名</th><th>增存高套</th>
+                <th>新装高套折算</th><th>存量高套折算</th><th>移动质态系数</th>
+                <th>明厨包</th><th>明厨包拉动新增</th><th>明厨包拉动存量</th>
+            </tr></thead><tbody><tr class="summary-row">
+            <td colspan="2" class="type-cell summary-type">总体汇总</td>
+            <td>9285.18</td><td>--</td>
+            <td class="highlight-cell">67.2</td>
+            <td>22.2</td><td>45</td>
+            <td>0.6154</td>
+            <td>28</td><td>4</td><td>4</td>
+        </tr><tr><td rowspan="8" class="type-col type-cell type-cell-pq">片区经理</td><td class="name-cell name-pq">欧乐东</td><td>1814.93</td><td>6</td><td class="highlight-cell">9.55</td><td>5.8</td><td>3.75</td><td>0.6</td><td>11</td><td>3</td><td>0</td></tr><tr><td class="name-cell name-pq">凌伟全</td><td>253.58</td><td>75</td><td class="highlight-cell">1.05</td><td>0.8</td><td>0.25</td><td>0.5</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">周振宇</td><td>603.48</td><td>44</td><td class="highlight-cell">2.75</td><td>0.5</td><td>2.25</td><td>1</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">黎汉生</td><td>1594.66</td><td>7</td><td class="highlight-cell">19.5</td><td>1</td><td>18.5</td><td>--</td><td>4</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">欧阳滔</td><td>802.41</td><td>29</td><td class="highlight-cell">4</td><td>1.5</td><td>2.5</td><td>0</td><td>3</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">莫卓希</td><td>0</td><td>87</td><td class="highlight-cell">0</td><td>0</td><td>0</td><td>--</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">周艳婷</td><td>427.49</td><td>57</td><td class="highlight-cell">2.5</td><td>0</td><td>2.5</td><td>--</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">麦永成</td><td>799.23</td><td>30</td><td class="highlight-cell">3.55</td><td>2.3</td><td>1.25</td><td>0.6667</td><td>2</td><td>0</td><td>0</td></tr><tr><td rowspan="6" class="type-col type-cell type-cell-zw">装维</td><td class="name-cell name-zw">陈学贤</td><td>0</td><td>66</td><td class="highlight-cell">0</td><td>0</td><td>0</td><td>--</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-zw">沈钰洋</td><td>136.33</td><td>57</td><td class="highlight-cell">1.05</td><td>0.3</td><td>0.75</td><td>1</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-zw">温桂荣</td><td>1176.74</td><td>4</td><td class="highlight-cell">8</td><td>5.5</td><td>2.5</td><td>0.5</td><td>2</td><td>0</td><td>2</td></tr><tr><td class="name-cell name-zw">陈永恒</td><td>160.51</td><td>54</td><td class="highlight-cell">0.75</td><td>0</td><td>0.75</td><td>--</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-zw">周辉</td><td>1127.16</td><td>5</td><td class="highlight-cell">11</td><td>4.5</td><td>6.5</td><td>0.875</td><td>3</td><td>1</td><td>1</td></tr><tr><td class="name-cell name-zw">刘建河</td><td>388.66</td><td>30</td><td class="highlight-cell">3.5</td><td>0</td><td>3.5</td><td>--</td><td>0</td><td>0</td><td>0</td></tr></tbody></table>
+        </div>
+    </div>
+
+    <!-- 日破零 -->
+    <div class="section">
+        <div class="section-title">日破零情况<span class="section-sub">（531时间: 2026-09-22，取受理时间，划小全市）</span></div>
+
+        <div style="margin-bottom: 24px;">
+            <div style="font-size:14px; color:#8aa0b8; margin-bottom:12px;">
+                对标片区经理2天业务破零、装维经理3天业务破零的完成情况（未破零天数 = 距上次有业务的天数）
+            </div>
+            <div class="zb-group"><div class="zb-group-title">片区经理（对标2天破零）</div><div class="zb-badges"><div class="zb-badge zb-good"><span class="zb-name">欧阳滔</span><span class="zb-days">1天</span></div><div class="zb-badge zb-good"><span class="zb-name">欧乐东</span><span class="zb-days">2天</span></div><div class="zb-badge zb-good"><span class="zb-name">周艳婷</span><span class="zb-days">2天</span></div><div class="zb-badge zb-good"><span class="zb-name">麦永成</span><span class="zb-days">2天</span></div><div class="zb-badge zb-warn"><span class="zb-name">黎汉生</span><span class="zb-days">3天</span></div><div class="zb-badge zb-warn"><span class="zb-name">周振宇</span><span class="zb-days">5天</span></div><div class="zb-badge zb-bad"><span class="zb-name">凌伟全</span><span class="zb-days">19天</span></div><div class="zb-badge zb-bad"><span class="zb-name">莫卓希</span><span class="zb-days">22天</span></div></div></div><div class="zb-group"><div class="zb-group-title">装维（对标3天破零）</div><div class="zb-badges"><div class="zb-badge zb-good"><span class="zb-name">陈学贤</span><span class="zb-days">1天</span></div><div class="zb-badge zb-good"><span class="zb-name">陈永恒</span><span class="zb-days">1天</span></div><div class="zb-badge zb-good"><span class="zb-name">刘建河</span><span class="zb-days">2天</span></div><div class="zb-badge zb-good"><span class="zb-name">周辉</span><span class="zb-days">3天</span></div><div class="zb-badge zb-warn"><span class="zb-name">温桂荣</span><span class="zb-days">4天</span></div><div class="zb-badge zb-bad"><span class="zb-name">沈钰洋</span><span class="zb-days">8天</span></div></div></div>
+        </div>
+
+        <div style="margin-bottom: 10px; font-size:14px; color:#8aa0b8;">
+                当月每日业务明细（高套折算值, 数据源: 531平台-业务转化清单 · 新受理高套清单）
+        </div>
+        <div class="daily-scroll">
+            <table class="daily-table" style="min-width: 1056px"><thead><tr><th class="col-type">类型</th><th class="col-name">姓名</th><th class="col-total">合计</th><th class="col-day">01</th><th class="col-day">02</th><th class="col-day">03</th><th class="col-day">04</th><th class="col-day">05</th><th class="col-day">06</th><th class="col-day">07</th><th class="col-day">08</th><th class="col-day">09</th><th class="col-day">10</th><th class="col-day">11</th><th class="col-day">12</th><th class="col-day">13</th><th class="col-day">14</th><th class="col-day">15</th><th class="col-day">16</th><th class="col-day">17</th><th class="col-day">18</th><th class="col-day">19</th><th class="col-day">20</th><th class="col-day">21</th><th class="col-day">22</th></tr></thead><tbody><tr><td rowspan="8" class="col-type type-cell type-cell-pq">片区经理</td><td class="col-name name-pq">欧乐东</td><td class="col-total total-pq">7.05</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.8</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">1</td><td class="no-data">-</td><td class="has-data">1</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="has-data">0.75</td><td class="has-data">3</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-pq">凌伟全</td><td class="col-total total-pq">1.05</td><td class="no-data">-</td><td class="has-data">0.3</td><td class="has-data">0.75</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-pq">周振宇</td><td class="col-total total-pq">3.25</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">1</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.25</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-pq">黎汉生</td><td class="col-total total-pq">21</td><td class="no-data">-</td><td class="has-data">7.5</td><td class="no-data">-</td><td class="has-data">4</td><td class="has-data">4.25</td><td class="has-data">2</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.25</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">3</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-pq">欧阳滔</td><td class="col-total total-pq">6</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="has-data">0.25</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">1</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="has-data">0.25</td><td class="has-data">1</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="has-data">1.5</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-pq">莫卓希</td><td class="col-total total-pq">0</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-pq">周艳婷</td><td class="col-total total-pq">3</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">1</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="has-data">1</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-pq">麦永成</td><td class="col-total total-pq">5.05</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.25</td><td class="no-data">-</td><td class="has-data">1</td><td class="has-data">0.3</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="has-data">1</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="has-data">1.5</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr><tr><td rowspan="6" class="col-type type-cell type-cell-zw">装维</td><td class="col-name name-zw">陈学贤</td><td class="col-total total-zw">1</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">1</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-zw">沈钰洋</td><td class="col-total total-zw">0.75</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.25</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-zw">温桂荣</td><td class="col-total total-zw">8</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="has-data">2</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">1.5</td><td class="no-data">-</td><td class="has-data">1.5</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">2</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-zw">陈永恒</td><td class="col-total total-zw">1.75</td><td class="has-data">0.25</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.25</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.25</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-zw">周辉</td><td class="col-total total-zw">7.5</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">3.5</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">2.5</td><td class="has-data">0.25</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="has-data">0.25</td><td class="has-data">0.5</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr><tr><td class="col-name name-zw">刘建河</td><td class="col-total total-zw">3.25</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">2</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.75</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="no-data">-</td><td class="has-data">0.5</td><td class="no-data red-alert">-</td><td class="no-data red-alert">-</td></tr></tbody></table>
+        </div>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:rgba(46,213,115,0.3)"></div>有业务</div>
+            <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>无业务</div>
+            <div class="legend-item"><div class="legend-dot" style="background:rgba(255,71,87,0.3)"></div>未破零区间</div>
+            <div class="legend-item"><div class="legend-dot" style="background:rgba(255,215,0,0.1)"></div>合计</div>
+        </div>
+    </div>
+
+</div>
+<script>
+
+function switchTab(type) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.rank-panel').forEach(p => p.classList.remove('active'));
+    if (type === 'value') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('panel-value').classList.add('active');
+    } else {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('panel-gaotao').classList.add('active');
+    }
+}
+
+</script>
+</body>
+</html>
