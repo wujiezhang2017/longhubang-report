@@ -136,6 +136,9 @@ body {
 .type-cell-zw { color: #ff9f43; }
 .name-pq { color: #ffffff; }
 .name-zw { color: #ff9f43; }
+.rate-cell { font-weight: 700; }
+.rate-pq { color: #00d4ff; }
+.rate-zw { color: #ff9f43; }
 .total-pq { color: #ffffff; }
 .total-zw { color: #ff9f43; }
 .type-col { width: 40px; min-width: 40px; }
@@ -228,8 +231,8 @@ td.type-cell-pq, td.type-cell-zw {
 .col-day { width: auto; }
 .has-data { color: #2ed573; font-weight: 600; background: rgba(46, 213, 115, 0.08); }
 .no-data { color: rgba(255,255,255,0.15); }
-.red-alert { background: rgba(255, 71, 87, 0.15) !important; color: #ff4757; }
-.daily-table tr:hover td.red-alert { background: rgba(255, 71, 87, 0.28) !important; }
+.red-alert { background: rgba(255, 48, 66, 0.85) !important; color: #ffffff; font-weight: 800; }
+.daily-table tr:hover td.red-alert { background: rgba(255, 48, 66, 0.95) !important; }
 
 /* ===== 图例（表前左对齐） ===== */
 .legend { display: flex; gap: 16px; margin-bottom: 10px; font-size: 12px; color: #8aa0b8; justify-content: flex-start; flex-wrap: wrap; }
@@ -386,17 +389,17 @@ td.type-cell-pq, td.type-cell-zw {
             <thead><tr>
                 <th class="type-col">类型</th>
                 <th class="name-head">姓名</th>
-                <th>价值积分</th><th>序列内排名</th><th>增存高套</th>
+                <th>价值积分</th><th>积分完成率</th><th>序列内排名</th><th>增存高套</th><th>高套完成率</th>
                 <th>新装高套折算</th><th>存量高套折算</th><th>移动质态系数</th>
                 <th>明厨包</th><th>明厨包拉动新增</th><th>明厨包拉动存量</th>
             </tr></thead><tbody><tr class="summary-row">
             <td colspan="2" class="type-cell summary-type">总体汇总</td>
-            <td>9692.14</td><td>--</td>
-            <td class="highlight-cell">67.2</td>
+            <td>9692.14</td><td>--</td><td>--</td>
+            <td class="highlight-cell">67.2</td><td>--</td>
             <td>23.7</td><td>43.5</td>
             <td>0</td>
             <td>29</td><td>4</td><td>4</td>
-        </tr><tr><td rowspan="8" class="type-col type-cell type-cell-pq">片区经理</td><td class="name-cell name-pq">欧乐东</td><td>1756.93</td><td>7</td><td class="highlight-cell">7.55</td><td>5.8</td><td>1.75</td><td>0</td><td>11</td><td>3</td><td>0</td></tr><tr><td class="name-cell name-pq">凌伟全</td><td>308.13</td><td>70</td><td class="highlight-cell">0.55</td><td>0.3</td><td>0.25</td><td>0</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">周振宇</td><td>600.06</td><td>46</td><td class="highlight-cell">2.75</td><td>0.5</td><td>2.25</td><td>0</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">黎汉生</td><td>1650.66</td><td>8</td><td class="highlight-cell">20</td><td>1</td><td>19</td><td>--</td><td>5</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">欧阳滔</td><td>1032.29</td><td>22</td><td class="highlight-cell">5.5</td><td>3</td><td>2.5</td><td>0</td><td>3</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">莫卓希</td><td>0</td><td>87</td><td class="highlight-cell">0</td><td>0</td><td>0</td><td>--</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">周艳婷</td><td>490.99</td><td>53</td><td class="highlight-cell">3</td><td>0.5</td><td>2.5</td><td>0</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">麦永成</td><td>788.93</td><td>30</td><td class="highlight-cell">3.55</td><td>2.3</td><td>1.25</td><td>0</td><td>2</td><td>0</td><td>0</td></tr><tr><td rowspan="6" class="type-col type-cell type-cell-zw">装维</td><td class="name-cell name-zw">陈学贤</td><td>60.75</td><td>63</td><td class="highlight-cell">0</td><td>0</td><td>0</td><td>--</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-zw">沈钰洋</td><td>136.33</td><td>58</td><td class="highlight-cell">1.05</td><td>0.3</td><td>0.75</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-zw">温桂荣</td><td>1176.74</td><td>5</td><td class="highlight-cell">8</td><td>5.5</td><td>2.5</td><td>0</td><td>2</td><td>0</td><td>2</td></tr><tr><td class="name-cell name-zw">陈永恒</td><td>160.51</td><td>56</td><td class="highlight-cell">0.75</td><td>0</td><td>0.75</td><td>--</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-zw">周辉</td><td>1127.16</td><td>6</td><td class="highlight-cell">11</td><td>4.5</td><td>6.5</td><td>0</td><td>3</td><td>1</td><td>1</td></tr><tr><td class="name-cell name-zw">刘建河</td><td>402.66</td><td>27</td><td class="highlight-cell">3.5</td><td>0</td><td>3.5</td><td>--</td><td>0</td><td>0</td><td>0</td></tr></tbody></table>
+        </tr><tr><td rowspan="8" class="type-col type-cell type-cell-pq">片区经理</td><td class="name-cell name-pq">欧乐东</td><td>1756.93</td><td class="rate-cell rate-pq">109.81%</td><td>7</td><td class="highlight-cell">7.55</td><td class="rate-cell rate-pq">94.38%</td><td>5.8</td><td>1.75</td><td>0</td><td>11</td><td>3</td><td>0</td></tr><tr><td class="name-cell name-pq">凌伟全</td><td>308.13</td><td class="rate-cell rate-pq">19.26%</td><td>70</td><td class="highlight-cell">0.55</td><td class="rate-cell rate-pq">6.88%</td><td>0.3</td><td>0.25</td><td>0</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">周振宇</td><td>600.06</td><td class="rate-cell rate-pq">37.5%</td><td>46</td><td class="highlight-cell">2.75</td><td class="rate-cell rate-pq">34.38%</td><td>0.5</td><td>2.25</td><td>0</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">黎汉生</td><td>1650.66</td><td class="rate-cell rate-pq">103.17%</td><td>8</td><td class="highlight-cell">20</td><td class="rate-cell rate-pq">250%</td><td>1</td><td>19</td><td>--</td><td>5</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">欧阳滔</td><td>1032.29</td><td class="rate-cell rate-pq">64.52%</td><td>22</td><td class="highlight-cell">5.5</td><td class="rate-cell rate-pq">68.75%</td><td>3</td><td>2.5</td><td>0</td><td>3</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">莫卓希</td><td>0</td><td class="rate-cell rate-pq">0%</td><td>87</td><td class="highlight-cell">0</td><td class="rate-cell rate-pq">0%</td><td>0</td><td>0</td><td>--</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">周艳婷</td><td>490.99</td><td class="rate-cell rate-pq">30.69%</td><td>53</td><td class="highlight-cell">3</td><td class="rate-cell rate-pq">37.5%</td><td>0.5</td><td>2.5</td><td>0</td><td>1</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-pq">麦永成</td><td>788.93</td><td class="rate-cell rate-pq">49.31%</td><td>30</td><td class="highlight-cell">3.55</td><td class="rate-cell rate-pq">44.38%</td><td>2.3</td><td>1.25</td><td>0</td><td>2</td><td>0</td><td>0</td></tr><tr><td rowspan="6" class="type-col type-cell type-cell-zw">装维</td><td class="name-cell name-zw">陈学贤</td><td>60.75</td><td class="rate-cell rate-zw">6.75%</td><td>63</td><td class="highlight-cell">0</td><td class="rate-cell rate-zw">0%</td><td>0</td><td>0</td><td>--</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-zw">沈钰洋</td><td>136.33</td><td class="rate-cell rate-zw">15.15%</td><td>58</td><td class="highlight-cell">1.05</td><td class="rate-cell rate-zw">26.25%</td><td>0.3</td><td>0.75</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-zw">温桂荣</td><td>1176.74</td><td class="rate-cell rate-zw">130.75%</td><td>5</td><td class="highlight-cell">8</td><td class="rate-cell rate-zw">200%</td><td>5.5</td><td>2.5</td><td>0</td><td>2</td><td>0</td><td>2</td></tr><tr><td class="name-cell name-zw">陈永恒</td><td>160.51</td><td class="rate-cell rate-zw">17.83%</td><td>56</td><td class="highlight-cell">0.75</td><td class="rate-cell rate-zw">18.75%</td><td>0</td><td>0.75</td><td>--</td><td>0</td><td>0</td><td>0</td></tr><tr><td class="name-cell name-zw">周辉</td><td>1127.16</td><td class="rate-cell rate-zw">125.24%</td><td>6</td><td class="highlight-cell">11</td><td class="rate-cell rate-zw">275%</td><td>4.5</td><td>6.5</td><td>0</td><td>3</td><td>1</td><td>1</td></tr><tr><td class="name-cell name-zw">刘建河</td><td>402.66</td><td class="rate-cell rate-zw">44.74%</td><td>27</td><td class="highlight-cell">3.5</td><td class="rate-cell rate-zw">87.5%</td><td>0</td><td>3.5</td><td>--</td><td>0</td><td>0</td><td>0</td></tr></tbody></table>
         </div>
     </div>
 
@@ -406,10 +409,10 @@ td.type-cell-pq, td.type-cell-zw {
 
         <div style="margin-bottom: 24px;">
             <div style="font-size:14px; color:#8aa0b8; margin-bottom:12px;">
-                531时间: 2026-09-22，取受理时间
+                对标片区经理2天业务破零、装维经理3天业务破零的完成情况（未破零天数 = 距上次有业务的天数）
             </div>
             <div style="font-size:14px; color:#8aa0b8; margin-bottom:12px;">
-                对标片区经理2天业务破零、装维经理3天业务破零的完成情况（未破零天数 = 距上次有业务的天数）
+                531时间: 2026-09-22，取受理时间
             </div>
             <div class="zb-group"><div class="zb-group-title">片区经理（对标2天破零）</div><div class="zb-badges"><div class="zb-badge zb-good"><span class="zb-name">欧阳滔</span><span class="zb-days">1天</span></div><div class="zb-badge zb-good"><span class="zb-name">欧乐东</span><span class="zb-days">2天</span></div><div class="zb-badge zb-good"><span class="zb-name">周艳婷</span><span class="zb-days">2天</span></div><div class="zb-badge zb-good"><span class="zb-name">麦永成</span><span class="zb-days">2天</span></div><div class="zb-badge zb-warn"><span class="zb-name">黎汉生</span><span class="zb-days">3天</span></div><div class="zb-badge zb-warn"><span class="zb-name">周振宇</span><span class="zb-days">5天</span></div><div class="zb-badge zb-bad"><span class="zb-name">凌伟全</span><span class="zb-days">19天</span></div><div class="zb-badge zb-bad"><span class="zb-name">莫卓希</span><span class="zb-days">22天</span></div></div></div><div class="zb-group"><div class="zb-group-title">装维（对标3天破零）</div><div class="zb-badges"><div class="zb-badge zb-good"><span class="zb-name">陈学贤</span><span class="zb-days">1天</span></div><div class="zb-badge zb-good"><span class="zb-name">陈永恒</span><span class="zb-days">1天</span></div><div class="zb-badge zb-good"><span class="zb-name">刘建河</span><span class="zb-days">2天</span></div><div class="zb-badge zb-good"><span class="zb-name">周辉</span><span class="zb-days">3天</span></div><div class="zb-badge zb-warn"><span class="zb-name">温桂荣</span><span class="zb-days">4天</span></div><div class="zb-badge zb-bad"><span class="zb-name">沈钰洋</span><span class="zb-days">8天</span></div></div></div>
         </div>
@@ -429,7 +432,7 @@ td.type-cell-pq, td.type-cell-zw {
             <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:rgba(46,213,115,0.3)"></div>有业务</div>
         <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>无业务</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,71,87,0.3)"></div>未破零区间</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,48,66,0.85)"></div>未破零区间</div>
         <div class="legend-item"><div class="legend-dot" style="background:rgba(255,215,0,0.1)"></div>合计</div>
     </div>
             <div class="daily-scroll">
@@ -443,7 +446,7 @@ td.type-cell-pq, td.type-cell-zw {
             <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:rgba(46,213,115,0.3)"></div>有业务</div>
         <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>无业务</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,71,87,0.3)"></div>未破零区间</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,48,66,0.85)"></div>未破零区间</div>
         <div class="legend-item"><div class="legend-dot" style="background:rgba(255,215,0,0.1)"></div>合计</div>
     </div>
             <div class="daily-scroll">
@@ -457,7 +460,7 @@ td.type-cell-pq, td.type-cell-zw {
             <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:rgba(46,213,115,0.3)"></div>有业务</div>
         <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>无业务</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,71,87,0.3)"></div>未破零区间</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,48,66,0.85)"></div>未破零区间</div>
         <div class="legend-item"><div class="legend-dot" style="background:rgba(255,215,0,0.1)"></div>合计</div>
     </div>
             <div class="daily-scroll">
@@ -471,7 +474,7 @@ td.type-cell-pq, td.type-cell-zw {
             <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:rgba(46,213,115,0.3)"></div>有业务</div>
         <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div>无业务</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,71,87,0.3)"></div>未破零区间</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,48,66,0.85)"></div>未破零区间</div>
         <div class="legend-item"><div class="legend-dot" style="background:rgba(255,215,0,0.1)"></div>合计</div>
     </div>
             <div class="daily-scroll">
