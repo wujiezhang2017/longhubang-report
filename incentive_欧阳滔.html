@@ -98,15 +98,20 @@ body {
 .data-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
 .data-scroll::-webkit-scrollbar-thumb { background: rgba(0, 212, 255, 0.3); border-radius: 4px; }
 .data-table {
-    width: 100%; border-collapse: collapse; font-size: 14px; min-width: 1600px;
+    width: 100%; border-collapse: collapse; font-size: 14px; min-width: 1400px;
 }
 .data-table th {
-    background: rgba(0, 212, 255, 0.12); color: #00d4ff; padding: 10px 8px;
-    text-align: center; font-weight: 700; border-bottom: 2px solid rgba(0, 212, 255, 0.3); white-space: nowrap;
+    background: rgba(0, 153, 255, 0.15); color: #00d4ff; padding: 10px 8px;
+    text-align: center; font-weight: 700; border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+    border-right: 1px solid rgba(0, 212, 255, 0.35); background-clip: padding-box;
+    white-space: normal; word-break: break-all; line-height: 1.3;
 }
+.data-table th:last-child { border-right: none; }
+.data-table thead tr:first-child th { border-bottom: 1px solid rgba(0, 212, 255, 0.35); }
 .data-table td {
     padding: 10px 8px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); white-space: nowrap;
 }
+.data-table td.name-cell { color: #ffffff !important; }
 .data-table tr:hover td { background: rgba(0, 212, 255, 0.12); }
 .data-table tr:hover td.type-col, .data-table tr:hover td.name-cell { background: #1a3450; }
 .data-table tr:hover td.summary-type { background: #12405a; }
@@ -121,16 +126,16 @@ body {
 .rate-pq { color: #00d4ff; }
 .rate-zw { color: #ff9f43; }
 .target-cell { color: #8aa0b8; font-weight: 600; font-size: 13px; }
-.incentive-link { color: #00d4ff; text-decoration: none; font-weight: 700; cursor: pointer; }
-.incentive-link:hover { text-decoration: underline; }
+.incentive-link { color: #00d4ff; text-decoration: underline; font-weight: 700; cursor: pointer; }
+.incentive-link:hover { text-decoration: underline; color: #00ffff; }
 .type-col { width: 40px; min-width: 40px; }
 .data-table th.type-col { padding: 10px 2px; }
 .data-table td.type-col { padding: 10px 2px; }
 td.type-cell-pq, td.type-cell-zw {
     writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 6px;
 }
-.data-table th.type-col { position: sticky; left: 0; z-index: 3; background: #0b3242; }
-.data-table th.name-head { position: sticky; left: 40px; z-index: 3; background: #0b3242; }
+.data-table th.type-col { position: sticky; left: 0; z-index: 3; background: #0b3a5e; background-clip: padding-box; }
+.data-table th.name-head { position: sticky; left: 40px; z-index: 3; background: #0b3a5e; background-clip: padding-box; }
 .data-table td.type-col { position: sticky; left: 0; z-index: 2; background: #12283a; }
 .data-table td.name-cell { position: sticky; left: 40px; z-index: 2; background: #12283a; }
 .data-table td.summary-type { position: sticky; left: 0; z-index: 2; background: #0d3043; }
@@ -246,866 +251,76 @@ td.type-cell-pq, td.type-cell-zw {
     .zb-badge { padding: 6px 10px; font-size: 12px; }
     .zb-badges { gap: 6px; }
 }
+
+.search-box { margin-bottom: 16px; }
+.search-input {
+    width: 100%; max-width: 500px; padding: 12px 20px;
+    background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px; color: #e0e6ed; font-size: 15px; outline: none;
+}
+.search-input:focus { border-color: #00d4ff; box-shadow: 0 0 12px rgba(0, 212, 255, 0.2); }
+.search-input::placeholder { color: #8aa0b8; }
 </style>
 </head>
 <body>
 <div class="container">
-    <a class="back-link" href="index.html">&larr; 返回龙虎榜</a>
+    <a class="back-link" href="./">&larr; 返回龙虎榜</a>
     <div class="header">
         <div class="title-wrap">
         <h1>欧阳滔 激励积分清单</h1>
         <div class="glow-line"></div>
         </div>
         <div class="timestamps">
-            <span>竣工时间: 2026-09-26</span>
-            <span>531时间: 2026-09-27</span>
             <span>积分清单统计时间: 2026-09-26</span>
         </div>
     </div>
     <div class="section">
         <div class="section-title">激励积分明细<span class="section-sub">（数据源: 积分清单）</span></div>
+        <div class="search-box">
+            <input class="search-input" type="text" placeholder="搜索客户姓名、客户编号、业务号码或积分描述..." oninput="filterTable(this.value)">
+        </div>
         <div class="data-scroll">
-        <table class="data-table" style="min-width: 900px">
+        <table class="data-table" id="incentive-table" style="min-width: 900px">
             <thead><tr>
-                <th>data_date</th>
+                <th>客户姓名</th>
                 <th>客户编号</th>
                 <th>业务号码</th>
-                <th>人员姓名</th>
-                <th>激励积分</th>
                 <th>积分描述</th>
-                <th>客户姓名</th>
+                <th>激励积分汇总</th>
             </tr></thead>
-            <tbody><tr>
-            <td>20260926</td>
-            <td>2020104700862100</td>
-            <td>199****9669</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-30.98</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">对缴费复通，或“虽未复通，但不欠费且活跃的”用户，T+7补结质检扣回的全部激励积分</td>
-            <td>O*********</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020104700862100</td>
-            <td>199****9669</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">88.5</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">对缴费复通，或“虽未复通，但不欠费且活跃的”用户，T+7补结质检扣回的全部激励积分</td>
-            <td>O*********</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020816302240000</td>
-            <td>ADSLD25****2670</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-8.25</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%T+6对于号码拆除销售品进行激励积分回收</td>
-            <td>姚**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020706718830000</td>
-            <td>189****9145</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td>
-            <td>谭**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020039758500000</td>
-            <td>138****8741</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新入网后付费用户未绑定企业微信扣20分。</td>
-            <td>郭**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105526467100</td>
-            <td>191****6193</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">10</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">基础激励=1倍价值积分。</td>
-            <td>冯**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105526467100</td>
-            <td>191****8935</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">88.5</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非合约129以下，激励积分1.5倍套餐主体积分=1.5*59=88.5</td>
-            <td>冯**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105526467100</td>
-            <td>191****8935</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新入网后付费用户未办理托收业务扣20分。</td>
-            <td>冯**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020736488900000</td>
-            <td>ADSLD21****1228</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">80</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">主推改高套，激励积分为提值部分40*2。</td>
-            <td>崔**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020736488900000</td>
-            <td>ADSLD21****1228</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">16.58</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td>
-            <td>崔**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020038236250000</td>
-            <td>189****1413</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">88.5</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非合约129以下，激励积分1.5倍套餐主体积分=1.5*59=88.5</td>
-            <td>殷**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020229089950000</td>
-            <td>ADSLD20****5298</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">一户一案次推，激励积分30。</td>
-            <td>黄**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020229089950000</td>
-            <td>ADSLD20****5298</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">50</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">主推改高套，激励积分为提值部分25*2。</td>
-            <td>黄**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020054892160000</td>
-            <td>180****2853</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-40</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">延后续约终补话补销售品场景</td>
-            <td>莫**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020054892160000</td>
-            <td>ADS****1492</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">8.25</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td>
-            <td>莫**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020054892160000</td>
-            <td>ADS****1492</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD4G02-660-1-19积分为40,本号码分摊积分为20,导向系数为1 T+1发放100%</td>
-            <td>莫**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020020307870000</td>
-            <td>190****2867</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新入网后付费用户未办理托收业务扣20分。</td>
-            <td>黄**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020020307870000</td>
-            <td>190****2867</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-50</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">针对非城中村新入网单品合约和融合，非满卡扣罚50元（分）/户。</td>
-            <td>黄**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020020307870000</td>
-            <td>190****2867</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">258</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非FTTR/非合约129及以上，激励积分为2倍礼包价值=2*129=258</td>
-            <td>黄**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020020307870000</td>
-            <td>ADSLD26****2194</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">0.75</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-1积分为0.75,本号码分摊积分为0.75,导向系数为1 T+1发放100%</td>
-            <td>黄**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105590144100</td>
-            <td>TYSL84401001****5802</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">204</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-440-1-13积分为68,本号码分摊积分为68,导向系数为3 T+1发放100%</td>
-            <td>唐**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105590144100</td>
-            <td>TYSL84401001****5802</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">225</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-443-1-5积分为75,本号码分摊积分为75,导向系数为3 T+1发放100%</td>
-            <td>唐**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105590144100</td>
-            <td>TYSL84401001****5802</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0003-432-1-2积分为-10,本号码分摊积分为-10,导向系数为3 T+1发放100%</td>
-            <td>唐**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020042940560000</td>
-            <td>ADSLD25****3436</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">一户一案次推，激励积分30。</td>
-            <td>黄**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020042940560000</td>
-            <td>ADSLD25****3436</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">48</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">主推改高套，激励积分为提值部分24*2。</td>
-            <td>黄**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105082044100</td>
-            <td>181****8101</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新入网后付费用户未办理托收业务扣20分。</td>
-            <td>李**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105082044100</td>
-            <td>181****8101</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-50</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">针对非城中村新入网单品合约和融合，非满卡扣罚50元（分）/户。</td>
-            <td>李**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105082044100</td>
-            <td>181****8101</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">258</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非FTTR/非合约129及以上，激励积分为2倍礼包价值=2*129=258</td>
-            <td>李**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020020307870000</td>
-            <td>****3026</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-23.7</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">本月套餐主体积分：0，上月套餐主体积分：23.7，本月提值积分：-23.7</td>
-            <td>黄**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105609249100</td>
-            <td>TYSL84401001****8030</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">204</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-440-1-13积分为68,本号码分摊积分为68,导向系数为3 T+1发放100%</td>
-            <td>马**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105609249100</td>
-            <td>TYSL84401001****8030</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-174</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-446-1-3积分为-58,本号码分摊积分为-58,导向系数为3 T+1发放100%</td>
-            <td>马**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020724719930000</td>
-            <td>ADSLD25****8267</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">80</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">一户一案首推，激励积分80。</td>
-            <td>梁**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020056223170000</td>
-            <td>TYSL84401001****3613</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">204</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-440-1-13积分为68,本号码分摊积分为68,导向系数为3 T+1发放100%</td>
-            <td>何**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020056223170000</td>
-            <td>TYSL84401001****3613</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0003-432-1-2积分为-10,本号码分摊积分为-10,导向系数为3 T+1发放100%</td>
-            <td>何**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>177****5264</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">318</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非礼包129及以上，激励积分2倍套餐主体积分=2*159=318</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>177****6570</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">12</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD5G02-057-1-2积分为6,本号码分摊积分为6,导向系数为2 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>ADSLD26****2444</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">25</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD4G02-660-1-17积分为50,本号码分摊积分为25,导向系数为1 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105622064100</td>
-            <td>181****7692</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新入网后付费用户未办理托收业务扣20分。</td>
-            <td>郑**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105633001100</td>
-            <td>133****5130</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">338</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非礼包129及以上，激励积分2倍套餐主体积分=2*169=338</td>
-            <td>罗**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105633001100</td>
-            <td>133****5130</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD4G02-659-1-50积分为60,本号码分摊积分为30,导向系数为1 T+1发放100%</td>
-            <td>罗**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105633001100</td>
-            <td>ADSLD26****8537</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">16.58</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td>
-            <td>罗**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105633001100</td>
-            <td>TYSL84401001****7375</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">204</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-440-1-13积分为68,本号码分摊积分为68,导向系数为3 T+1发放100%</td>
-            <td>罗**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105633001100</td>
-            <td>TYSL84401001****7375</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">225</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-443-1-5积分为75,本号码分摊积分为75,导向系数为3 T+1发放100%</td>
-            <td>罗**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105633001100</td>
-            <td>TYSL84401001****7375</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0003-432-1-2积分为-10,本号码分摊积分为-10,导向系数为3 T+1发放100%</td>
-            <td>罗**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020745054690000</td>
-            <td>189****1710</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">本月套餐主体积分：159，上月套餐主体积分：189，本月提值积分：-30</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020745054690000</td>
-            <td>189****1710</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD4G02-660-1-19积分为40,本号码分摊积分为20,导向系数为1 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020745054690000</td>
-            <td>ADSLD25****9665</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">8.25</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020104521341100</td>
-            <td>133****7456</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">T+9根据前9个月（含当月）累计实收与激励积分累计发放质检，当累计实收＜累计激励积分时，按累计激励积分-累计实收差额扣回</td>
-            <td>辛**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020104655609100</td>
-            <td>190****3534</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">70</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">针对满卡、企微吸粉、托收专项考核，T+7对于累计扣罚大于累计发放激励积分的号码补回多扣的激励积分</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020104700862100</td>
-            <td>199****9669</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">32.48</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">针对满卡、企微吸粉、托收专项考核，T+7对于累计扣罚大于累计发放激励积分的号码补回多扣的激励积分</td>
-            <td>O*********</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020104830161100</td>
-            <td>173****1232</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-57.53</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非礼包129以下，激励积分为1.5倍套餐主体积分=1.5*59=88.5,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。T+6对于号码状态不满足在网不欠费（即出现拆机、停机、欠费）进行激励积分回收</td>
-            <td>H***********</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020544002120000</td>
-            <td>153****9510</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-88.5</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非合约129以下，激励积分1.5倍套餐主体积分=1.5*59=88.5T+6对于号码状态不满足在网不欠费（即出现拆机、停机、欠费）进行激励积分回收</td>
-            <td>申**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105231856100</td>
-            <td>189****1769</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-30.98</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">T+3变为不活跃，按T+1的35%扣回激励积分</td>
-            <td>G********</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105232713100</td>
-            <td>137****3357</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020104442925100</td>
-            <td>173****1622</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-139.3</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">T+3变为不活跃，按T+1的35%扣回激励积分</td>
-            <td>马**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020044996480000</td>
-            <td>ADSLD26****3743</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-10.5</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">T+3变为不活跃，按T+1的35%扣回激励积分</td>
-            <td>彭**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020155596380000</td>
-            <td>181****3432</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020155596380000</td>
-            <td>190****4948</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020052613170000</td>
-            <td>190****1018</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td>
-            <td>郭**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020311546150000</td>
-            <td>173****8164</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新入网后付费用户未绑定企业微信扣20分。</td>
-            <td>邓**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020039758500000</td>
-            <td>138****8741</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td>
-            <td>郭**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105512588100</td>
-            <td>190****1461</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新入网后付费用户未绑定企业微信扣20分。</td>
-            <td>杨**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020736488900000</td>
-            <td>ADSLD21****1228</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">80</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">一户一案首推，激励积分80。</td>
-            <td>崔**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020034007500000</td>
-            <td>ADSLD25****3232</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">15</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">为提升包区拆挽上门的积极性，针对拆挽工单设置上门动作激励15分（元）/单</td>
-            <td>杨*</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020054892160000</td>
-            <td>180****2853</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD4G02-660-1-19积分为40,本号码分摊积分为20,导向系数为1 T+1发放100%</td>
-            <td>莫**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020034964710000</td>
-            <td>ADSLD21****9230</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">一户一案次推，激励积分30。</td>
-            <td>梁**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020034964710000</td>
-            <td>ADSLD21****9230</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">138</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">主推改高套，激励积分为提值部分69*2。</td>
-            <td>梁**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020034964710000</td>
-            <td>ADSLD21****9230</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">16.58</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td>
-            <td>梁**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105590144100</td>
-            <td>TYSL84401001****5802</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">5.75</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-3积分为5.75,本号码分摊积分为5.75,导向系数为1 T+1发放100%</td>
-            <td>唐**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105590144100</td>
-            <td>TYSL84401001****5802</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-440-1-2积分为10,本号码分摊积分为10,导向系数为3 T+1发放100%</td>
-            <td>唐**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105590144100</td>
-            <td>TYSL84401001****5802</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-165</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-446-1-1积分为-55,本号码分摊积分为-55,导向系数为3 T+1发放100%</td>
-            <td>唐**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105590144100</td>
-            <td>TYSL84401001****5802</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-174</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-446-1-3积分为-58,本号码分摊积分为-58,导向系数为3 T+1发放100%</td>
-            <td>唐**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020042940560000</td>
-            <td>ADSLD25****3436</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">8.25</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td>
-            <td>黄**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105082044100</td>
-            <td>ADSLD26****9620</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">0.75</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-1积分为0.75,本号码分摊积分为0.75,导向系数为1 T+1发放100%</td>
-            <td>李**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105609249100</td>
-            <td>TYSL84401001****8030</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">5.75</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-3积分为5.75,本号码分摊积分为5.75,导向系数为1 T+1发放100%</td>
-            <td>马**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105609249100</td>
-            <td>TYSL84401001****8030</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-440-1-2积分为10,本号码分摊积分为10,导向系数为3 T+1发放100%</td>
-            <td>马**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105609249100</td>
-            <td>TYSL84401001****8030</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">225</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-443-1-5积分为75,本号码分摊积分为75,导向系数为3 T+1发放100%</td>
-            <td>马**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105609249100</td>
-            <td>TYSL84401001****8030</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-165</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-446-1-1积分为-55,本号码分摊积分为-55,导向系数为3 T+1发放100%</td>
-            <td>马**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105609249100</td>
-            <td>TYSL84401001****8030</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0003-432-1-2积分为-10,本号码分摊积分为-10,导向系数为3 T+1发放100%</td>
-            <td>马**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020724719930000</td>
-            <td>ADSLD25****8267</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">100</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">主推改高套，激励积分为提值部分50*2。</td>
-            <td>梁**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020056223170000</td>
-            <td>TYSL84401001****3613</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">5.75</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-3积分为5.75,本号码分摊积分为5.75,导向系数为1 T+1发放100%</td>
-            <td>何**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020056223170000</td>
-            <td>TYSL84401001****3613</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-440-1-2积分为10,本号码分摊积分为10,导向系数为3 T+1发放100%</td>
-            <td>何**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020056223170000</td>
-            <td>TYSL84401001****3613</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">225</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-443-1-5积分为75,本号码分摊积分为75,导向系数为3 T+1发放100%</td>
-            <td>何**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020056223170000</td>
-            <td>TYSL84401001****3613</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-165</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-446-1-1积分为-55,本号码分摊积分为-55,导向系数为3 T+1发放100%</td>
-            <td>何**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020056223170000</td>
-            <td>TYSL84401001****3613</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-174</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-446-1-3积分为-58,本号码分摊积分为-58,导向系数为3 T+1发放100%</td>
-            <td>何**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>177****5264</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新入网后付费用户未办理托收业务扣20分。</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>177****5264</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">25</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD4G02-660-1-17积分为50,本号码分摊积分为25,导向系数为1 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>177****5264</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-10</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD4G02-672-1-7积分为-5,本号码分摊积分为-5,导向系数为2 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>177****5264</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">27.9</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-447-1-2积分为9.3,本号码分摊积分为9.3,导向系数为3 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>177****6570</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">12</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD4G02-522-1-1积分为6,本号码分摊积分为6,导向系数为2 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>177****6570</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD5G02-067-1-2积分为10,本号码分摊积分为10,导向系数为2 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>177****6570</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-24</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD5G02-465-1-1积分为-12,本号码分摊积分为-12,导向系数为2 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>ADSLD26****2444</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">15</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">针对全新融合21x给予专项激励，即对于21X中仅有非itv的智家业务给予上限15分的奖励。</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020460712080000</td>
-            <td>ADSLD26****2444</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">16.58</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105622064100</td>
-            <td>181****7692</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">88.5</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非合约129以下，激励积分1.5倍套餐主体积分=1.5*59=88.5</td>
-            <td>郑**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105632026100</td>
-            <td>153****7701</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">57.53</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非合约129以下，激励积分1.5倍套餐主体积分=1.5*59=88.5,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td>
-            <td>郑**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105632026100</td>
-            <td>153****7701</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新入网后付费用户未办理托收业务扣20分。</td>
-            <td>郑**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105633001100</td>
-            <td>ADSLD26****8537</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD4G02-659-1-50积分为60,本号码分摊积分为30,导向系数为1 T+1发放100%</td>
-            <td>罗**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105633001100</td>
-            <td>TYSL84401001****7375</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-440-1-2积分为10,本号码分摊积分为10,导向系数为3 T+1发放100%</td>
-            <td>罗**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105633001100</td>
-            <td>TYSL84401001****7375</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-165</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-446-1-1积分为-55,本号码分摊积分为-55,导向系数为3 T+1发放100%</td>
-            <td>罗**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105633001100</td>
-            <td>TYSL84401001****7375</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">-174</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品ZH0002-446-1-3积分为-58,本号码分摊积分为-58,导向系数为3 T+1发放100%</td>
-            <td>罗**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020745054690000</td>
-            <td>ADSLD25****9665</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">一户一案次推，激励积分30。</td>
-            <td>陈**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020745054690000</td>
-            <td>ADSLD25****9665</td>
-            <td>欧阳滔</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品YD4G02-660-1-19积分为40,本号码分摊积分为20,导向系数为1 T+1发放100%</td>
-            <td>陈**</td>
-        </tr><tr class="summary-row">
+            <tbody><tr><td rowspan="3">O*********</td><td rowspan="3">2020104700862100</td><td>199****9669</td><td style="text-align:left;max-width:400px;word-break:break-all">对缴费复通，或“虽未复通，但不欠费且活跃的”用户，T+7补结质检扣回的全部激励积分</td><td rowspan="3" class="highlight-cell">90</td></tr><tr><td>199****9669</td><td style="text-align:left;max-width:400px;word-break:break-all">对缴费复通，或“虽未复通，但不欠费且活跃的”用户，T+7补结质检扣回的全部激励积分</td></tr><tr><td>199****9669</td><td style="text-align:left;max-width:400px;word-break:break-all">针对满卡、企微吸粉、托收专项考核，T+7对于累计扣罚大于累计发放激励积分的号码补回多扣的激励积分</td></tr><tr><td rowspan="1">姚**</td><td rowspan="1">2020816302240000</td><td>ADSLD25****2670</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%T+6对于号码拆除销售品进行激励积分回收</td><td rowspan="1" class="highlight-cell">-8.25</td></tr><tr><td rowspan="1">谭**</td><td rowspan="1">2020706718830000</td><td>189****9145</td><td style="text-align:left;max-width:400px;word-break:break-all">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="2">郭**</td><td rowspan="2">3020039758500000</td><td>138****8741</td><td style="text-align:left;max-width:400px;word-break:break-all">新入网后付费用户未绑定企业微信扣20分。</td><td rowspan="2" class="highlight-cell">0</td></tr><tr><td>138****8741</td><td style="text-align:left;max-width:400px;word-break:break-all">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td></tr><tr><td rowspan="3">冯**</td><td rowspan="3">2020105526467100</td><td>191****6193</td><td style="text-align:left;max-width:400px;word-break:break-all">基础激励=1倍价值积分。</td><td rowspan="3" class="highlight-cell">78.5</td></tr><tr><td>191****8935</td><td style="text-align:left;max-width:400px;word-break:break-all">非合约129以下，激励积分1.5倍套餐主体积分=1.5*59=88.5</td></tr><tr><td>191****8935</td><td style="text-align:left;max-width:400px;word-break:break-all">新入网后付费用户未办理托收业务扣20分。</td></tr><tr><td rowspan="3">崔**</td><td rowspan="3">2020736488900000</td><td>ADSLD21****1228</td><td style="text-align:left;max-width:400px;word-break:break-all">主推改高套，激励积分为提值部分40*2。</td><td rowspan="3" class="highlight-cell">176.58</td></tr><tr><td>ADSLD21****1228</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td></tr><tr><td>ADSLD21****1228</td><td style="text-align:left;max-width:400px;word-break:break-all">一户一案首推，激励积分80。</td></tr><tr><td rowspan="1">殷**</td><td rowspan="1">3020038236250000</td><td>189****1413</td><td style="text-align:left;max-width:400px;word-break:break-all">非合约129以下，激励积分1.5倍套餐主体积分=1.5*59=88.5</td><td rowspan="1" class="highlight-cell">88.5</td></tr><tr><td rowspan="2">黄**</td><td rowspan="2">2020229089950000</td><td>ADSLD20****5298</td><td style="text-align:left;max-width:400px;word-break:break-all">一户一案次推，激励积分30。</td><td rowspan="2" class="highlight-cell">80</td></tr><tr><td>ADSLD20****5298</td><td style="text-align:left;max-width:400px;word-break:break-all">主推改高套，激励积分为提值部分25*2。</td></tr><tr><td rowspan="4">莫**</td><td rowspan="4">3020054892160000</td><td>180****2853</td><td style="text-align:left;max-width:400px;word-break:break-all">延后续约终补话补销售品场景</td><td rowspan="4" class="highlight-cell">8.25</td></tr><tr><td>ADS****1492</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td></tr><tr><td>ADS****1492</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD4G02-660-1-19积分为40,本号码分摊积分为20,导向系数为1 T+1发放100%</td></tr><tr><td>180****2853</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD4G02-660-1-19积分为40,本号码分摊积分为20,导向系数为1 T+1发放100%</td></tr><tr><td rowspan="5">黄**</td><td rowspan="5">3020020307870000</td><td>190****2867</td><td style="text-align:left;max-width:400px;word-break:break-all">新入网后付费用户未办理托收业务扣20分。</td><td rowspan="5" class="highlight-cell">165.05</td></tr><tr><td>190****2867</td><td style="text-align:left;max-width:400px;word-break:break-all">针对非城中村新入网单品合约和融合，非满卡扣罚50元（分）/户。</td></tr><tr><td>190****2867</td><td style="text-align:left;max-width:400px;word-break:break-all">非FTTR/非合约129及以上，激励积分为2倍礼包价值=2*129=258</td></tr><tr><td>ADSLD26****2194</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-1积分为0.75,本号码分摊积分为0.75,导向系数为1 T+1发放100%</td></tr><tr><td>****3026</td><td style="text-align:left;max-width:400px;word-break:break-all">本月套餐主体积分：0，上月套餐主体积分：23.7，本月提值积分：-23.7</td></tr><tr><td rowspan="7">唐**</td><td rowspan="7">2020105590144100</td><td>TYSL84401001****5802</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-440-1-13积分为68,本号码分摊积分为68,导向系数为3 T+1发放100%</td><td rowspan="7" class="highlight-cell">95.75</td></tr><tr><td>TYSL84401001****5802</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-443-1-5积分为75,本号码分摊积分为75,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****5802</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0003-432-1-2积分为-10,本号码分摊积分为-10,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****5802</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-3积分为5.75,本号码分摊积分为5.75,导向系数为1 T+1发放100%</td></tr><tr><td>TYSL84401001****5802</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-440-1-2积分为10,本号码分摊积分为10,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****5802</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-446-1-1积分为-55,本号码分摊积分为-55,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****5802</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-446-1-3积分为-58,本号码分摊积分为-58,导向系数为3 T+1发放100%</td></tr><tr><td rowspan="3">黄**</td><td rowspan="3">3020042940560000</td><td>ADSLD25****3436</td><td style="text-align:left;max-width:400px;word-break:break-all">一户一案次推，激励积分30。</td><td rowspan="3" class="highlight-cell">86.25</td></tr><tr><td>ADSLD25****3436</td><td style="text-align:left;max-width:400px;word-break:break-all">主推改高套，激励积分为提值部分24*2。</td></tr><tr><td>ADSLD25****3436</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td></tr><tr><td rowspan="4">李**</td><td rowspan="4">2020105082044100</td><td>181****8101</td><td style="text-align:left;max-width:400px;word-break:break-all">新入网后付费用户未办理托收业务扣20分。</td><td rowspan="4" class="highlight-cell">188.75</td></tr><tr><td>181****8101</td><td style="text-align:left;max-width:400px;word-break:break-all">针对非城中村新入网单品合约和融合，非满卡扣罚50元（分）/户。</td></tr><tr><td>181****8101</td><td style="text-align:left;max-width:400px;word-break:break-all">非FTTR/非合约129及以上，激励积分为2倍礼包价值=2*129=258</td></tr><tr><td>ADSLD26****9620</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-1积分为0.75,本号码分摊积分为0.75,导向系数为1 T+1发放100%</td></tr><tr><td rowspan="7">马**</td><td rowspan="7">2020105609249100</td><td>TYSL84401001****8030</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-440-1-13积分为68,本号码分摊积分为68,导向系数为3 T+1发放100%</td><td rowspan="7" class="highlight-cell">95.75</td></tr><tr><td>TYSL84401001****8030</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-446-1-3积分为-58,本号码分摊积分为-58,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****8030</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-3积分为5.75,本号码分摊积分为5.75,导向系数为1 T+1发放100%</td></tr><tr><td>TYSL84401001****8030</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-440-1-2积分为10,本号码分摊积分为10,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****8030</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-443-1-5积分为75,本号码分摊积分为75,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****8030</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-446-1-1积分为-55,本号码分摊积分为-55,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****8030</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0003-432-1-2积分为-10,本号码分摊积分为-10,导向系数为3 T+1发放100%</td></tr><tr><td rowspan="2">梁**</td><td rowspan="2">2020724719930000</td><td>ADSLD25****8267</td><td style="text-align:left;max-width:400px;word-break:break-all">一户一案首推，激励积分80。</td><td rowspan="2" class="highlight-cell">180</td></tr><tr><td>ADSLD25****8267</td><td style="text-align:left;max-width:400px;word-break:break-all">主推改高套，激励积分为提值部分50*2。</td></tr><tr><td rowspan="7">何**</td><td rowspan="7">3020056223170000</td><td>TYSL84401001****3613</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-440-1-13积分为68,本号码分摊积分为68,导向系数为3 T+1发放100%</td><td rowspan="7" class="highlight-cell">95.75</td></tr><tr><td>TYSL84401001****3613</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0003-432-1-2积分为-10,本号码分摊积分为-10,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****3613</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-3积分为5.75,本号码分摊积分为5.75,导向系数为1 T+1发放100%</td></tr><tr><td>TYSL84401001****3613</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-440-1-2积分为10,本号码分摊积分为10,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****3613</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-443-1-5积分为75,本号码分摊积分为75,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****3613</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-446-1-1积分为-55,本号码分摊积分为-55,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****3613</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-446-1-3积分为-58,本号码分摊积分为-58,导向系数为3 T+1发放100%</td></tr><tr><td rowspan="12">陈**</td><td rowspan="12">2020460712080000</td><td>177****5264</td><td style="text-align:left;max-width:400px;word-break:break-all">非礼包129及以上，激励积分2倍套餐主体积分=2*159=318</td><td rowspan="12" class="highlight-cell">417.48</td></tr><tr><td>177****6570</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD5G02-057-1-2积分为6,本号码分摊积分为6,导向系数为2 T+1发放100%</td></tr><tr><td>ADSLD26****2444</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD4G02-660-1-17积分为50,本号码分摊积分为25,导向系数为1 T+1发放100%</td></tr><tr><td>177****5264</td><td style="text-align:left;max-width:400px;word-break:break-all">新入网后付费用户未办理托收业务扣20分。</td></tr><tr><td>177****5264</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD4G02-660-1-17积分为50,本号码分摊积分为25,导向系数为1 T+1发放100%</td></tr><tr><td>177****5264</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD4G02-672-1-7积分为-5,本号码分摊积分为-5,导向系数为2 T+1发放100%</td></tr><tr><td>177****5264</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-447-1-2积分为9.3,本号码分摊积分为9.3,导向系数为3 T+1发放100%</td></tr><tr><td>177****6570</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD4G02-522-1-1积分为6,本号码分摊积分为6,导向系数为2 T+1发放100%</td></tr><tr><td>177****6570</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD5G02-067-1-2积分为10,本号码分摊积分为10,导向系数为2 T+1发放100%</td></tr><tr><td>177****6570</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD5G02-465-1-1积分为-12,本号码分摊积分为-12,导向系数为2 T+1发放100%</td></tr><tr><td>ADSLD26****2444</td><td style="text-align:left;max-width:400px;word-break:break-all">针对全新融合21x给予专项激励，即对于21X中仅有非itv的智家业务给予上限15分的奖励。</td></tr><tr><td>ADSLD26****2444</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td></tr><tr><td rowspan="2">郑**</td><td rowspan="2">2020105622064100</td><td>181****7692</td><td style="text-align:left;max-width:400px;word-break:break-all">新入网后付费用户未办理托收业务扣20分。</td><td rowspan="2" class="highlight-cell">68.5</td></tr><tr><td>181****7692</td><td style="text-align:left;max-width:400px;word-break:break-all">非合约129以下，激励积分1.5倍套餐主体积分=1.5*59=88.5</td></tr><tr><td rowspan="10">罗**</td><td rowspan="10">2020105633001100</td><td>133****5130</td><td style="text-align:left;max-width:400px;word-break:break-all">非礼包129及以上，激励积分2倍套餐主体积分=2*169=338</td><td rowspan="10" class="highlight-cell">504.58</td></tr><tr><td>133****5130</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD4G02-659-1-50积分为60,本号码分摊积分为30,导向系数为1 T+1发放100%</td></tr><tr><td>ADSLD26****8537</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td></tr><tr><td>TYSL84401001****7375</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-440-1-13积分为68,本号码分摊积分为68,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****7375</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-443-1-5积分为75,本号码分摊积分为75,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****7375</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0003-432-1-2积分为-10,本号码分摊积分为-10,导向系数为3 T+1发放100%</td></tr><tr><td>ADSLD26****8537</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD4G02-659-1-50积分为60,本号码分摊积分为30,导向系数为1 T+1发放100%</td></tr><tr><td>TYSL84401001****7375</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-440-1-2积分为10,本号码分摊积分为10,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****7375</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-446-1-1积分为-55,本号码分摊积分为-55,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****7375</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品ZH0002-446-1-3积分为-58,本号码分摊积分为-58,导向系数为3 T+1发放100%</td></tr><tr><td rowspan="5">陈**</td><td rowspan="5">2020745054690000</td><td>189****1710</td><td style="text-align:left;max-width:400px;word-break:break-all">本月套餐主体积分：159，上月套餐主体积分：189，本月提值积分：-30</td><td rowspan="5" class="highlight-cell">48.25</td></tr><tr><td>189****1710</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD4G02-660-1-19积分为40,本号码分摊积分为20,导向系数为1 T+1发放100%</td></tr><tr><td>ADSLD25****9665</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td></tr><tr><td>ADSLD25****9665</td><td style="text-align:left;max-width:400px;word-break:break-all">一户一案次推，激励积分30。</td></tr><tr><td>ADSLD25****9665</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品YD4G02-660-1-19积分为40,本号码分摊积分为20,导向系数为1 T+1发放100%</td></tr><tr><td rowspan="1">辛**</td><td rowspan="1">2020104521341100</td><td>133****7456</td><td style="text-align:left;max-width:400px;word-break:break-all">T+9根据前9个月（含当月）累计实收与激励积分累计发放质检，当累计实收＜累计激励积分时，按累计激励积分-累计实收差额扣回</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">陈**</td><td rowspan="1">2020104655609100</td><td>190****3534</td><td style="text-align:left;max-width:400px;word-break:break-all">针对满卡、企微吸粉、托收专项考核，T+7对于累计扣罚大于累计发放激励积分的号码补回多扣的激励积分</td><td rowspan="1" class="highlight-cell">70</td></tr><tr><td rowspan="1">H***********</td><td rowspan="1">2020104830161100</td><td>173****1232</td><td style="text-align:left;max-width:400px;word-break:break-all">非礼包129以下，激励积分为1.5倍套餐主体积分=1.5*59=88.5,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。T+6对于号码状态不满足在网不欠费（即出现拆机、停机、欠费）进行激励积分回收</td><td rowspan="1" class="highlight-cell">-57.53</td></tr><tr><td rowspan="1">申**</td><td rowspan="1">2020544002120000</td><td>153****9510</td><td style="text-align:left;max-width:400px;word-break:break-all">非合约129以下，激励积分1.5倍套餐主体积分=1.5*59=88.5T+6对于号码状态不满足在网不欠费（即出现拆机、停机、欠费）进行激励积分回收</td><td rowspan="1" class="highlight-cell">-88.5</td></tr><tr><td rowspan="1">G********</td><td rowspan="1">2020105231856100</td><td>189****1769</td><td style="text-align:left;max-width:400px;word-break:break-all">T+3变为不活跃，按T+1的35%扣回激励积分</td><td rowspan="1" class="highlight-cell">-30.98</td></tr><tr><td rowspan="1">陈**</td><td rowspan="1">2020105232713100</td><td>137****3357</td><td style="text-align:left;max-width:400px;word-break:break-all">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="1">马**</td><td rowspan="1">2020104442925100</td><td>173****1622</td><td style="text-align:left;max-width:400px;word-break:break-all">T+3变为不活跃，按T+1的35%扣回激励积分</td><td rowspan="1" class="highlight-cell">-139.3</td></tr><tr><td rowspan="1">彭**</td><td rowspan="1">3020044996480000</td><td>ADSLD26****3743</td><td style="text-align:left;max-width:400px;word-break:break-all">T+3变为不活跃，按T+1的35%扣回激励积分</td><td rowspan="1" class="highlight-cell">-10.5</td></tr><tr><td rowspan="2">陈**</td><td rowspan="2">3020155596380000</td><td>181****3432</td><td style="text-align:left;max-width:400px;word-break:break-all">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td rowspan="2" class="highlight-cell">40</td></tr><tr><td>190****4948</td><td style="text-align:left;max-width:400px;word-break:break-all">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td></tr><tr><td rowspan="1">郭**</td><td rowspan="1">3020052613170000</td><td>190****1018</td><td style="text-align:left;max-width:400px;word-break:break-all">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="1">邓**</td><td rowspan="1">2020311546150000</td><td>173****8164</td><td style="text-align:left;max-width:400px;word-break:break-all">新入网后付费用户未绑定企业微信扣20分。</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">杨**</td><td rowspan="1">2020105512588100</td><td>190****1461</td><td style="text-align:left;max-width:400px;word-break:break-all">新入网后付费用户未绑定企业微信扣20分。</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">杨*</td><td rowspan="1">3020034007500000</td><td>ADSLD25****3232</td><td style="text-align:left;max-width:400px;word-break:break-all">为提升包区拆挽上门的积极性，针对拆挽工单设置上门动作激励15分（元）/单</td><td rowspan="1" class="highlight-cell">15</td></tr><tr><td rowspan="3">梁**</td><td rowspan="3">3020034964710000</td><td>ADSLD21****9230</td><td style="text-align:left;max-width:400px;word-break:break-all">一户一案次推，激励积分30。</td><td rowspan="3" class="highlight-cell">184.58</td></tr><tr><td>ADSLD21****9230</td><td style="text-align:left;max-width:400px;word-break:break-all">主推改高套，激励积分为提值部分69*2。</td></tr><tr><td>ADSLD21****9230</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td></tr><tr><td rowspan="2">郑**</td><td rowspan="2">2020105632026100</td><td>153****7701</td><td style="text-align:left;max-width:400px;word-break:break-all">非合约129以下，激励积分1.5倍套餐主体积分=1.5*59=88.5,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td><td rowspan="2" class="highlight-cell">37.53</td></tr><tr><td>153****7701</td><td style="text-align:left;max-width:400px;word-break:break-all">新入网后付费用户未办理托收业务扣20分。</td></tr><tr class="summary-row">
         <td colspan="4">合计</td>
         <td class="highlight-cell">2479.99</td>
-        <td colspan="2"></td>
     </tr></tbody></table>
         </div>
     </div>
 </div>
+<script>
+function filterTable(query) {
+    query = query.trim().toLowerCase();
+    const table = document.getElementById('incentive-table');
+    const tbody = table.querySelector('tbody');
+    const rows = tbody.querySelectorAll('tr:not(.summary-row)');
+    if (!query) {
+        rows.forEach(r => r.style.display = '');
+        const summary = tbody.querySelector('.summary-row');
+        if (summary) summary.style.display = '';
+        return;
+    }
+    rows.forEach(r => r.style.display = 'none');
+    let visibleCount = 0;
+    rows.forEach(r => {
+        const cells = r.querySelectorAll('td');
+        let text = '';
+        cells.forEach(c => text += ' ' + c.textContent.toLowerCase());
+        if (text.includes(query)) {
+            r.style.display = '';
+            visibleCount++;
+        }
+    });
+    const summary = tbody.querySelector('.summary-row');
+    if (summary) summary.style.display = visibleCount > 0 ? '' : 'none';
+}
+</script>
 </body>
 </html>
