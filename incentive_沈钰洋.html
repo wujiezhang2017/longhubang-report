@@ -98,15 +98,20 @@ body {
 .data-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
 .data-scroll::-webkit-scrollbar-thumb { background: rgba(0, 212, 255, 0.3); border-radius: 4px; }
 .data-table {
-    width: 100%; border-collapse: collapse; font-size: 14px; min-width: 1600px;
+    width: 100%; border-collapse: collapse; font-size: 14px; min-width: 1400px;
 }
 .data-table th {
-    background: rgba(0, 212, 255, 0.12); color: #00d4ff; padding: 10px 8px;
-    text-align: center; font-weight: 700; border-bottom: 2px solid rgba(0, 212, 255, 0.3); white-space: nowrap;
+    background: rgba(0, 153, 255, 0.15); color: #00d4ff; padding: 10px 8px;
+    text-align: center; font-weight: 700; border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+    border-right: 1px solid rgba(0, 212, 255, 0.35); background-clip: padding-box;
+    white-space: normal; word-break: break-all; line-height: 1.3;
 }
+.data-table th:last-child { border-right: none; }
+.data-table thead tr:first-child th { border-bottom: 1px solid rgba(0, 212, 255, 0.35); }
 .data-table td {
     padding: 10px 8px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); white-space: nowrap;
 }
+.data-table td.name-cell { color: #ffffff !important; }
 .data-table tr:hover td { background: rgba(0, 212, 255, 0.12); }
 .data-table tr:hover td.type-col, .data-table tr:hover td.name-cell { background: #1a3450; }
 .data-table tr:hover td.summary-type { background: #12405a; }
@@ -121,16 +126,16 @@ body {
 .rate-pq { color: #00d4ff; }
 .rate-zw { color: #ff9f43; }
 .target-cell { color: #8aa0b8; font-weight: 600; font-size: 13px; }
-.incentive-link { color: #00d4ff; text-decoration: none; font-weight: 700; cursor: pointer; }
-.incentive-link:hover { text-decoration: underline; }
+.incentive-link { color: #00d4ff; text-decoration: underline; font-weight: 700; cursor: pointer; }
+.incentive-link:hover { text-decoration: underline; color: #00ffff; }
 .type-col { width: 40px; min-width: 40px; }
 .data-table th.type-col { padding: 10px 2px; }
 .data-table td.type-col { padding: 10px 2px; }
 td.type-cell-pq, td.type-cell-zw {
     writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 6px;
 }
-.data-table th.type-col { position: sticky; left: 0; z-index: 3; background: #0b3242; }
-.data-table th.name-head { position: sticky; left: 40px; z-index: 3; background: #0b3242; }
+.data-table th.type-col { position: sticky; left: 0; z-index: 3; background: #0b3a5e; background-clip: padding-box; }
+.data-table th.name-head { position: sticky; left: 40px; z-index: 3; background: #0b3a5e; background-clip: padding-box; }
 .data-table td.type-col { position: sticky; left: 0; z-index: 2; background: #12283a; }
 .data-table td.name-cell { position: sticky; left: 40px; z-index: 2; background: #12283a; }
 .data-table td.summary-type { position: sticky; left: 0; z-index: 2; background: #0d3043; }
@@ -246,138 +251,76 @@ td.type-cell-pq, td.type-cell-zw {
     .zb-badge { padding: 6px 10px; font-size: 12px; }
     .zb-badges { gap: 6px; }
 }
+
+.search-box { margin-bottom: 16px; }
+.search-input {
+    width: 100%; max-width: 500px; padding: 12px 20px;
+    background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px; color: #e0e6ed; font-size: 15px; outline: none;
+}
+.search-input:focus { border-color: #00d4ff; box-shadow: 0 0 12px rgba(0, 212, 255, 0.2); }
+.search-input::placeholder { color: #8aa0b8; }
 </style>
 </head>
 <body>
 <div class="container">
-    <a class="back-link" href="index.html">&larr; 返回龙虎榜</a>
+    <a class="back-link" href="./">&larr; 返回龙虎榜</a>
     <div class="header">
         <div class="title-wrap">
         <h1>沈钰洋 激励积分清单</h1>
         <div class="glow-line"></div>
         </div>
         <div class="timestamps">
-            <span>竣工时间: 2026-09-26</span>
-            <span>531时间: 2026-09-27</span>
             <span>积分清单统计时间: 2026-09-26</span>
         </div>
     </div>
     <div class="section">
         <div class="section-title">激励积分明细<span class="section-sub">（数据源: 积分清单）</span></div>
+        <div class="search-box">
+            <input class="search-input" type="text" placeholder="搜索客户姓名、客户编号、业务号码或积分描述..." oninput="filterTable(this.value)">
+        </div>
         <div class="data-scroll">
-        <table class="data-table" style="min-width: 900px">
+        <table class="data-table" id="incentive-table" style="min-width: 900px">
             <thead><tr>
-                <th>data_date</th>
+                <th>客户姓名</th>
                 <th>客户编号</th>
                 <th>业务号码</th>
-                <th>人员姓名</th>
-                <th>激励积分</th>
                 <th>积分描述</th>
-                <th>客户姓名</th>
+                <th>激励积分汇总</th>
             </tr></thead>
-            <tbody><tr>
-            <td>20260926</td>
-            <td>2020690548760000</td>
-            <td>199****0201</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">-208.95</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">T+3变为不活跃，按T+1的35%扣回激励积分</td>
-            <td>曾**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020896795630000</td>
-            <td>193****1790</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td>
-            <td>莫**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020063595030000</td>
-            <td>ADSLD20****3625</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">30</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">一户一案次推，激励积分30。</td>
-            <td>谭**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105597465100</td>
-            <td>180****2812</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">88.5</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">非礼包129以下，激励积分为1.5倍套餐主体积分=1.5*59=88.5</td>
-            <td>M*************</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020000501890000</td>
-            <td>ADS****6590</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">60</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">一户一案顺销，激励积分60。</td>
-            <td>刘**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020000501890000</td>
-            <td>ADS****6590</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">100</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">主推改高套，激励积分为提值部分50*2。</td>
-            <td>刘**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020000501890000</td>
-            <td>ADS****6590</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">16.58</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td>
-            <td>刘**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020690548760000</td>
-            <td>135****3487</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td>
-            <td>曾**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>3020063595030000</td>
-            <td>ADSLD20****3625</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">主推改高套，激励积分为提值部分10*2。</td>
-            <td>谭**</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105597465100</td>
-            <td>180****2812</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">-20</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">新入网后付费用户未办理托收业务扣20分。</td>
-            <td>M*************</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105597465100</td>
-            <td>180****2812</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">-50</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">针对非城中村新入网单品合约和融合，非满卡扣罚50元（分）/户。</td>
-            <td>M*************</td>
-        </tr><tr>
-            <td>20260926</td>
-            <td>2020105597465100</td>
-            <td>ADSLD26****8754</td>
-            <td>沈钰洋</td>
-            <td class="highlight-cell">0.75</td>
-            <td style="text-align:left;max-width:400px;overflow:hidden;text-overflow:ellipsis">销售品DM0001-734-1-1积分为0.75,本号码分摊积分为0.75,导向系数为1 T+1发放100%</td>
-            <td>M*************</td>
-        </tr><tr class="summary-row">
+            <tbody><tr><td rowspan="2">曾**</td><td rowspan="2">2020690548760000</td><td>199****0201</td><td style="text-align:left;max-width:400px;word-break:break-all">T+3变为不活跃，按T+1的35%扣回激励积分</td><td rowspan="2" class="highlight-cell">-188.95</td></tr><tr><td>135****3487</td><td style="text-align:left;max-width:400px;word-break:break-all">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td></tr><tr><td rowspan="1">莫**</td><td rowspan="1">2020896795630000</td><td>193****1790</td><td style="text-align:left;max-width:400px;word-break:break-all">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="2">谭**</td><td rowspan="2">3020063595030000</td><td>ADSLD20****3625</td><td style="text-align:left;max-width:400px;word-break:break-all">一户一案次推，激励积分30。</td><td rowspan="2" class="highlight-cell">50</td></tr><tr><td>ADSLD20****3625</td><td style="text-align:left;max-width:400px;word-break:break-all">主推改高套，激励积分为提值部分10*2。</td></tr><tr><td rowspan="4">M*************</td><td rowspan="4">2020105597465100</td><td>180****2812</td><td style="text-align:left;max-width:400px;word-break:break-all">非礼包129以下，激励积分为1.5倍套餐主体积分=1.5*59=88.5</td><td rowspan="4" class="highlight-cell">19.25</td></tr><tr><td>180****2812</td><td style="text-align:left;max-width:400px;word-break:break-all">新入网后付费用户未办理托收业务扣20分。</td></tr><tr><td>180****2812</td><td style="text-align:left;max-width:400px;word-break:break-all">针对非城中村新入网单品合约和融合，非满卡扣罚50元（分）/户。</td></tr><tr><td>ADSLD26****8754</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-1积分为0.75,本号码分摊积分为0.75,导向系数为1 T+1发放100%</td></tr><tr><td rowspan="3">刘**</td><td rowspan="3">3020000501890000</td><td>ADS****6590</td><td style="text-align:left;max-width:400px;word-break:break-all">一户一案顺销，激励积分60。</td><td rowspan="3" class="highlight-cell">176.58</td></tr><tr><td>ADS****6590</td><td style="text-align:left;max-width:400px;word-break:break-all">主推改高套，激励积分为提值部分50*2。</td></tr><tr><td>ADS****6590</td><td style="text-align:left;max-width:400px;word-break:break-all">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td></tr><tr class="summary-row">
         <td colspan="4">合计</td>
         <td class="highlight-cell">76.88</td>
-        <td colspan="2"></td>
     </tr></tbody></table>
         </div>
     </div>
 </div>
+<script>
+function filterTable(query) {
+    query = query.trim().toLowerCase();
+    const table = document.getElementById('incentive-table');
+    const tbody = table.querySelector('tbody');
+    const rows = tbody.querySelectorAll('tr:not(.summary-row)');
+    if (!query) {
+        rows.forEach(r => r.style.display = '');
+        const summary = tbody.querySelector('.summary-row');
+        if (summary) summary.style.display = '';
+        return;
+    }
+    rows.forEach(r => r.style.display = 'none');
+    let visibleCount = 0;
+    rows.forEach(r => {
+        const cells = r.querySelectorAll('td');
+        let text = '';
+        cells.forEach(c => text += ' ' + c.textContent.toLowerCase());
+        if (text.includes(query)) {
+            r.style.display = '';
+            visibleCount++;
+        }
+    });
+    const summary = tbody.querySelector('.summary-row');
+    if (summary) summary.style.display = visibleCount > 0 ? '' : 'none';
+}
+</script>
 </body>
 </html>
