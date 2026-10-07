@@ -34,6 +34,15 @@ body {
     content: ''; display: inline-block; width: 8px; height: 8px;
     border-radius: 50%; background: #00d4ff; margin-right: 8px; box-shadow: 0 0 8px #00d4ff;
 }
+#archive-select {
+    display: none;
+    background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3);
+    color: #00d4ff; padding: 6px 14px; border-radius: 20px; font-size: 14px;
+    cursor: pointer; outline: none; font-family: inherit;
+}
+#archive-select option { background: #0a1929; color: #00d4ff; }
+#archive-select::before { content: ''; }
+#archive-select option:first-child { color: #8aa0b8; }
 .section { margin-bottom: 36px; }
 .section-title {
     font-size: 20px; font-weight: 700; color: #00d4ff; margin-bottom: 16px;
@@ -263,6 +272,7 @@ td.type-cell-pq, td.type-cell-zw {
         <div class="timestamps">
             <span>竣工时间: 2026-09-28</span>
             <span>531时间: 2026-09-29</span>
+            <select id="archive-select" aria-label="历史存档"></select>
         </div>
     </div>
     <div class="section">
@@ -391,6 +401,44 @@ function switchMetric(key) {
 document.querySelectorAll('.metric-btn').forEach(btn => {
     btn.addEventListener('click', function() { switchMetric(this.dataset.metric); });
 });
+(function() {{
+    var sel = document.getElementById('archive-select');
+    if (!sel) return;
+    // 本地 file:// 协议或无法访问网络时自动隐藏
+    if (location.protocol === 'file:') return;
+    // 推断 GitHub Pages 根路径
+    var path = location.pathname;
+    var prefix = '/longhubang-report/';
+    var idx = path.indexOf(prefix);
+    var basePath = idx >= 0 ? prefix : '/';
+    var jsonUrl = basePath + 'archives.json';
+    fetch(jsonUrl, {{cache: 'no-store'}})
+        .then(function(r) {{ if (!r.ok) throw new Error('no archives'); return r.json(); }})
+        .then(function(data) {{
+            var months = data.months || [];
+            if (!months.length) return;  // 无存档不显示
+            // 判断当前页是否为某个存档页
+            var curMonth = null;
+            var m = path.match(/archive-(\d{{6}})\//);
+            if (m) curMonth = m[1];
+            // 第一项：最新数据
+            var html = '<option value="latest"' + (curMonth ? '' : ' selected') + '>最新数据</option>';
+            months.forEach(function(ym) {{
+                var y = ym.slice(0,4), mo = ym.slice(4,6);
+                var label = y + '年' + mo + '月';
+                var sel_attr = (ym === curMonth) ? ' selected' : '';
+                html += '<option value="' + ym + '"' + sel_attr + '>' + label + '</option>';
+            }});
+            sel.innerHTML = html;
+            sel.style.display = 'inline-block';
+            sel.addEventListener('change', function() {{
+                var v = sel.value;
+                if (v === 'latest') {{ location.href = basePath; }}
+                else {{ location.href = basePath + 'archive-' + v + '/index.html'; }}
+            }});
+        }})
+        .catch(function(e) {{ /* 静默隐藏 */ }});
+}})();
 </script>
 </body>
 </html>
