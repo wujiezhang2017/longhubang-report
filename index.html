@@ -66,34 +66,38 @@ body {
     border-color: #00d4ff; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
 }
 .rank-panel { display: none; }
-.rank-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rank-panel.active { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .rank-card {
     background: rgba(13, 27, 42, 0.6); border: 1px solid rgba(0, 212, 255, 0.15);
-    border-radius: 12px; padding: 20px; backdrop-filter: blur(10px); transition: all 0.3s;
+    border-radius: 12px; padding: 14px; backdrop-filter: blur(10px); transition: all 0.3s;
 }
 .rank-card:hover { border-color: rgba(0, 212, 255, 0.4); box-shadow: 0 0 20px rgba(0, 212, 255, 0.1); }
-.rank-card-title { font-size: 16px; font-weight: 700; color: #00d4ff; margin-bottom: 16px; text-align: center; }
+.rank-card-title { font-size: 16px; font-weight: 700; color: #00d4ff; margin-bottom: 10px; text-align: center; }
 .top-card { border-color: rgba(255, 215, 0, 0.2); }
 .bottom-card { border-color: rgba(255, 71, 87, 0.2); }
-.top3-list { display: flex; flex-direction: column; gap: 10px; }
+.top3-list { display: flex; flex-direction: column; gap: 6px; }
 .top3-item {
-    display: flex; align-items: center; gap: 16px; padding: 14px 18px;
-    border-radius: 10px; transition: all 0.3s; min-height: 56px;
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border-radius: 10px; transition: all 0.3s; min-height: 48px;
 }
 .top3-item:hover { transform: translateX(4px); }
 .top3-item.gold { background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.05)); border: 1px solid rgba(255,215,0,0.4); }
 .top3-item.silver { background: linear-gradient(135deg, rgba(192,192,192,0.15), rgba(192,192,192,0.03)); border: 1px solid rgba(192,192,192,0.3); }
 .top3-item.bronze { background: linear-gradient(135deg, rgba(205,127,50,0.15), rgba(205,127,50,0.03)); border: 1px solid rgba(205,127,50,0.3); }
-.top3-rank { font-size: 36px; font-weight: 900; line-height: 1; min-width: 44px; text-align: center; flex-shrink: 0; }
+.top3-rank { font-size: 36px; font-weight: 900; line-height: 1; min-width: 38px; text-align: center; flex-shrink: 0; }
 .gold .top3-rank { color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.5); }
 .silver .top3-rank { color: #c0c0c0; }
 .bronze .top3-rank { color: #cd7f32; }
 .top3-info { flex: 1; }
 .top3-name { font-size: 18px; font-weight: 700; color: #e0e6ed; margin-bottom: 2px; }
 .top3-value { font-size: 16px; font-weight: 600; color: #8aa0b8; }
-.bottom-list { display: flex; flex-direction: column; gap: 8px; }
+/* 前三名数值颜色与排名数字一致（2026-10-09） */
+.gold .top3-value { color: #ffd700; }
+.silver .top3-value { color: #c0c0c0; }
+.bronze .top3-value { color: #cd7f32; }
+.bottom-list { display: flex; flex-direction: column; gap: 5px; }
 .bottom-item {
-    display: flex; align-items: center; gap: 12px; padding: 8px 12px;
+    display: flex; align-items: center; gap: 10px; padding: 6px 10px;
     background: rgba(255, 71, 87, 0.08); border-radius: 6px; border-left: 3px solid rgba(255, 71, 87, 0.5);
 }
 .bottom-rank { font-size: 13px; font-weight: 700; color: #ff6b7a; min-width: 42px; }
@@ -245,14 +249,14 @@ body {
 @media (max-width: 1200px) {
     .header h1 { font-size: 38px; letter-spacing: 4px; }
     .top3-rank { font-size: 32px; }
-    .rank-card { padding: 16px; }
+    .rank-card { padding: 12px; }
     .section { margin-bottom: 28px; }
 }
 @media (max-width: 1024px) {
     body { padding: 14px; }
     .header h1 { font-size: 32px; letter-spacing: 4px; }
     .section-title { font-size: 18px; }
-    .rank-panel.active { grid-template-columns: 1fr; }
+    .rank-panel.active { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 }
 @media (max-width: 768px) {
     body { padding: 12px; }
@@ -265,8 +269,8 @@ body {
     .section-title { font-size: 16px; flex-wrap: wrap; }
     .section-sub { font-size: 11px; }
     .tab-btn { padding: 8px 18px; font-size: 13px; }
-    .rank-panel.active { grid-template-columns: 1fr; }
-    .rank-card { padding: 14px; }
+    .rank-panel.active { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .rank-card { padding: 10px; }
     .top3-item { padding: 10px 12px; gap: 10px; min-height: 48px; }
     .top3-rank { font-size: 26px; min-width: 32px; }
     .top3-name { font-size: 15px; }
@@ -301,8 +305,8 @@ body {
             <button class="tab-btn active" onclick="switchTab('value')">价值积分</button>
             <button class="tab-btn" onclick="switchTab('gaotao')">增存高套</button>
         </div>
-        <div class="rank-panel active" id="panel-value"><div class="rank-card top-card"><div class="rank-card-title">片区经理 · 前三名</div><div class="top3-list"><div class="top3-item gold"><div class="top3-rank">1</div><div class="top3-info"><div class="top3-name">黎汉生</div><div class="top3-value">453.25</div></div></div><div class="top3-item silver"><div class="top3-rank">2</div><div class="top3-info"><div class="top3-name">周振宇</div><div class="top3-value">433.83</div></div></div><div class="top3-item bronze"><div class="top3-rank">3</div><div class="top3-info"><div class="top3-name">莫卓希</div><div class="top3-value">345</div></div></div></div></div><div class="rank-card top-card"><div class="rank-card-title">装维 · 前三名</div><div class="top3-list"><div class="top3-item gold"><div class="top3-rank">1</div><div class="top3-info"><div class="top3-name">温桂荣</div><div class="top3-value">307</div></div></div><div class="top3-item silver"><div class="top3-rank">2</div><div class="top3-info"><div class="top3-name">陈永恒</div><div class="top3-value">56.58</div></div></div><div class="top3-item bronze"><div class="top3-rank">3</div><div class="top3-info"><div class="top3-name">陈学贤</div><div class="top3-value">0</div></div></div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">片区经理 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">欧阳滔</span><span class="bottom-value">79.25</span></div><div class="bottom-item"><span class="bottom-rank">第7名</span><span class="bottom-name">凌伟全</span><span class="bottom-value">79</span></div><div class="bottom-item"><span class="bottom-rank">第8名</span><span class="bottom-name">欧乐东</span><span class="bottom-value">74.91</span></div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">装维 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第4名</span><span class="bottom-name">沈钰洋</span><span class="bottom-value">0</span></div><div class="bottom-item"><span class="bottom-rank">第5名</span><span class="bottom-name">周辉</span><span class="bottom-value">0</span></div><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">刘建河</span><span class="bottom-value">0</span></div></div></div></div>
-        <div class="rank-panel" id="panel-gaotao"><div class="rank-card top-card"><div class="rank-card-title">片区经理 · 前三名</div><div class="top3-list"><div class="top3-item gold"><div class="top3-rank">1</div><div class="top3-info"><div class="top3-name">莫卓希</div><div class="top3-value">4.5</div></div></div><div class="top3-item silver"><div class="top3-rank">2</div><div class="top3-info"><div class="top3-name">麦永成</div><div class="top3-value">3.5</div></div></div><div class="top3-item bronze"><div class="top3-rank">3</div><div class="top3-info"><div class="top3-name">黎汉生</div><div class="top3-value">2.8</div></div></div></div></div><div class="rank-card top-card"><div class="rank-card-title">装维 · 前三名</div><div class="top3-list"><div class="top3-item gold"><div class="top3-rank">1</div><div class="top3-info"><div class="top3-name">温桂荣</div><div class="top3-value">1.5</div></div></div><div class="top3-item silver"><div class="top3-rank">2</div><div class="top3-info"><div class="top3-name">陈永恒</div><div class="top3-value">1</div></div></div><div class="top3-item bronze"><div class="top3-rank">3</div><div class="top3-info"><div class="top3-name">陈学贤</div><div class="top3-value">0</div></div></div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">片区经理 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">欧乐东</span><span class="bottom-value">0.5</span></div><div class="bottom-item"><span class="bottom-rank">第7名</span><span class="bottom-name">欧阳滔</span><span class="bottom-value">0.5</span></div><div class="bottom-item"><span class="bottom-rank">第8名</span><span class="bottom-name">凌伟全</span><span class="bottom-value">0</span></div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">装维 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第4名</span><span class="bottom-name">沈钰洋</span><span class="bottom-value">0</span></div><div class="bottom-item"><span class="bottom-rank">第5名</span><span class="bottom-name">周辉</span><span class="bottom-value">0</span></div><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">刘建河</span><span class="bottom-value">0</span></div></div></div></div>
+        <div class="rank-panel active" id="panel-value"><div class="rank-card top-card"><div class="rank-card-title">片区经理 · 前三名</div><div class="top3-list"><div class="top3-item gold"><div class="top3-rank">1</div><div class="top3-info"><div class="top3-name">黎汉生</div><div class="top3-value">453.25</div></div></div><div class="top3-item silver"><div class="top3-rank">2</div><div class="top3-info"><div class="top3-name">周振宇</div><div class="top3-value">433.83</div></div></div><div class="top3-item bronze"><div class="top3-rank">3</div><div class="top3-info"><div class="top3-name">莫卓希</div><div class="top3-value">345</div></div></div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">片区经理 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">欧阳滔</span><span class="bottom-value">79.25</span></div><div class="bottom-item"><span class="bottom-rank">第7名</span><span class="bottom-name">凌伟全</span><span class="bottom-value">79</span></div><div class="bottom-item"><span class="bottom-rank">第8名</span><span class="bottom-name">欧乐东</span><span class="bottom-value">74.91</span></div></div></div><div class="rank-card top-card"><div class="rank-card-title">装维 · 前三名</div><div class="top3-list"><div class="top3-item gold"><div class="top3-rank">1</div><div class="top3-info"><div class="top3-name">温桂荣</div><div class="top3-value">307</div></div></div><div class="top3-item silver"><div class="top3-rank">2</div><div class="top3-info"><div class="top3-name">陈永恒</div><div class="top3-value">56.58</div></div></div><div class="top3-item bronze"><div class="top3-rank">3</div><div class="top3-info"><div class="top3-name">陈学贤</div><div class="top3-value">0</div></div></div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">装维 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第4名</span><span class="bottom-name">沈钰洋</span><span class="bottom-value">0</span></div><div class="bottom-item"><span class="bottom-rank">第5名</span><span class="bottom-name">周辉</span><span class="bottom-value">0</span></div><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">刘建河</span><span class="bottom-value">0</span></div></div></div></div>
+        <div class="rank-panel" id="panel-gaotao"><div class="rank-card top-card"><div class="rank-card-title">片区经理 · 前三名</div><div class="top3-list"><div class="top3-item gold"><div class="top3-rank">1</div><div class="top3-info"><div class="top3-name">莫卓希</div><div class="top3-value">4.5</div></div></div><div class="top3-item silver"><div class="top3-rank">2</div><div class="top3-info"><div class="top3-name">麦永成</div><div class="top3-value">3.5</div></div></div><div class="top3-item bronze"><div class="top3-rank">3</div><div class="top3-info"><div class="top3-name">黎汉生</div><div class="top3-value">2.8</div></div></div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">片区经理 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">欧乐东</span><span class="bottom-value">0.5</span></div><div class="bottom-item"><span class="bottom-rank">第7名</span><span class="bottom-name">欧阳滔</span><span class="bottom-value">0.5</span></div><div class="bottom-item"><span class="bottom-rank">第8名</span><span class="bottom-name">凌伟全</span><span class="bottom-value">0</span></div></div></div><div class="rank-card top-card"><div class="rank-card-title">装维 · 前三名</div><div class="top3-list"><div class="top3-item gold"><div class="top3-rank">1</div><div class="top3-info"><div class="top3-name">温桂荣</div><div class="top3-value">1.5</div></div></div><div class="top3-item silver"><div class="top3-rank">2</div><div class="top3-info"><div class="top3-name">陈永恒</div><div class="top3-value">1</div></div></div><div class="top3-item bronze"><div class="top3-rank">3</div><div class="top3-info"><div class="top3-name">陈学贤</div><div class="top3-value">0</div></div></div></div></div><div class="rank-card bottom-card"><div class="rank-card-title">装维 · 后三名</div><div class="bottom-list"><div class="bottom-item"><span class="bottom-rank">第4名</span><span class="bottom-name">沈钰洋</span><span class="bottom-value">0</span></div><div class="bottom-item"><span class="bottom-rank">第5名</span><span class="bottom-name">周辉</span><span class="bottom-value">0</span></div><div class="bottom-item"><span class="bottom-rank">第6名</span><span class="bottom-name">刘建河</span><span class="bottom-value">0</span></div></div></div></div>
     </div>
     <div class="section">
         <div class="section-title">团队业务详情<span class="section-sub">（竣工时间: 2026-10-07）</span></div>
