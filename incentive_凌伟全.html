@@ -72,13 +72,13 @@ body {
     border-radius: 12px; padding: 14px; backdrop-filter: blur(10px); transition: all 0.3s;
 }
 .rank-card:hover { border-color: rgba(0, 212, 255, 0.4); box-shadow: 0 0 20px rgba(0, 212, 255, 0.1); }
-.rank-card-title { font-size: 16px; font-weight: 700; color: #00d4ff; margin-bottom: 10px; text-align: center; }
+.rank-card-title { font-size: 22px; font-weight: 700; color: #00d4ff; margin-bottom: 10px; text-align: center; }
 .top-card { border-color: rgba(255, 215, 0, 0.2); }
 .bottom-card { border-color: rgba(255, 71, 87, 0.2); }
 .top3-list { display: flex; flex-direction: column; gap: 6px; }
 .top3-item {
-    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-    border-radius: 10px; transition: all 0.3s; min-height: 48px;
+    display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 0 12px; height: 48px;
+    border-radius: 10px; transition: all 0.3s;
 }
 .top3-item:hover { transform: translateX(4px); }
 .top3-item.gold { background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.05)); border: 1px solid rgba(255,215,0,0.4); }
@@ -88,21 +88,25 @@ body {
 .gold .top3-rank { color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.5); }
 .silver .top3-rank { color: #c0c0c0; }
 .bronze .top3-rank { color: #cd7f32; }
-.top3-info { flex: 1; }
-.top3-name { font-size: 18px; font-weight: 700; color: #e0e6ed; margin-bottom: 2px; }
-.top3-value { font-size: 16px; font-weight: 600; color: #8aa0b8; }
+.top3-info { flex: 0 0 auto; display: flex; flex-direction: row; align-items: center; gap: 10px; }
+.top3-name { font-size: 36px; font-weight: 700; color: #e0e6ed; line-height: 1.1; white-space: nowrap; }
+.top3-value { font-size: 36px; font-weight: 600; color: #8aa0b8; line-height: 1.1; white-space: nowrap; }
 /* 前三名数值颜色与排名数字一致（2026-10-09） */
 .gold .top3-value { color: #ffd700; }
 .silver .top3-value { color: #c0c0c0; }
 .bronze .top3-value { color: #cd7f32; }
-.bottom-list { display: flex; flex-direction: column; gap: 5px; }
+/* 后三名布局参考前三（2026-10-10）：名次纯数字，PC单行/手机两行，左对齐，保留红色系 */
+.bottom-list { display: flex; flex-direction: column; gap: 6px; }
 .bottom-item {
-    display: flex; align-items: center; gap: 10px; padding: 6px 10px;
-    background: rgba(255, 71, 87, 0.08); border-radius: 6px; border-left: 3px solid rgba(255, 71, 87, 0.5);
+    display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 0 12px; height: 48px;
+    border-radius: 10px; transition: all 0.3s;
+    background: rgba(255, 71, 87, 0.08); border-left: 3px solid rgba(255, 71, 87, 0.5);
 }
-.bottom-rank { font-size: 13px; font-weight: 700; color: #ff6b7a; min-width: 42px; }
-.bottom-name { font-size: 14px; flex: 1; color: #d0d8e0; }
-.bottom-value { font-size: 14px; font-weight: 600; color: #ff6b7a; }
+.bottom-item:hover { transform: translateX(4px); }
+.bottom-rank { font-size: 36px; font-weight: 900; line-height: 1; min-width: 38px; text-align: center; flex-shrink: 0; color: #ff6b7a; }
+.bottom-info { flex: 0 0 auto; display: flex; flex-direction: row; align-items: center; gap: 10px; }
+.bottom-name { font-size: 36px; font-weight: 700; color: #d0d8e0; line-height: 1.1; white-space: nowrap; }
+.bottom-value { font-size: 36px; font-weight: 600; color: #ff6b7a; line-height: 1.1; white-space: nowrap; }
 .data-scroll {
     overflow-x: auto; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.15);
     background: rgba(13, 27, 42, 0.4); max-width: 100%;
@@ -249,6 +253,8 @@ body {
 @media (max-width: 1200px) {
     .header h1 { font-size: 38px; letter-spacing: 4px; }
     .top3-rank { font-size: 32px; }
+    .bottom-rank { font-size: 32px; }
+    .top3-name, .top3-value, .bottom-name, .bottom-value { font-size: 32px; }
     .rank-card { padding: 12px; }
     .section { margin-bottom: 28px; }
 }
@@ -271,10 +277,17 @@ body {
     .tab-btn { padding: 8px 18px; font-size: 13px; }
     .rank-panel.active { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .rank-card { padding: 10px; }
-    .top3-item { padding: 10px 12px; gap: 10px; min-height: 48px; }
+    .rank-card-title { font-size: 16px; margin-bottom: 8px; }
+    .top3-item { height: auto; padding: 5px 10px; gap: 8px; min-height: 38px; justify-content: flex-start; }
+    .top3-info { flex-direction: column; gap: 0; align-items: flex-start; }
     .top3-rank { font-size: 26px; min-width: 32px; }
-    .top3-name { font-size: 15px; }
+    .top3-name { font-size: 15px; margin-bottom: 2px; }
     .top3-value { font-size: 13px; }
+    .bottom-item { height: auto; padding: 5px 10px; gap: 8px; min-height: 38px; justify-content: flex-start; }
+    .bottom-info { flex-direction: column; gap: 0; align-items: flex-start; }
+    .bottom-rank { font-size: 26px; min-width: 32px; }
+    .bottom-name { font-size: 15px; margin-bottom: 2px; }
+    .bottom-value { font-size: 13px; }
     .data-table, .daily-table, .data-table.biz-table, .data-table.action-table { font-size: 12px; }
     .data-table th { padding: 8px 4px; }
     .data-table td { padding: 8px 4px; }
