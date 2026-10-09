@@ -149,22 +149,21 @@ body {
 .target-cell { color: #ffffff; font-weight: 600; }
 .incentive-link { color: #ffffff; text-decoration: underline; font-weight: 700; cursor: pointer; }
 .incentive-link:hover { text-decoration: underline; color: #00ffff; }
-.type-col { width: 40px; min-width: 40px; }
-/* 团队动作详情表列宽：类型加宽、姓名变窄、其余均分（2026-10-08） */
-.action-table { table-layout: fixed; min-width: 1000px; }
-.action-table .type-col { width: 56px; min-width: 56px; }
+/* 类型/姓名列宽两个详情表统一（2026-10-09）：类型列56px、姓名列76px，sticky偏移同步56px */
+.type-col { width: 56px; min-width: 56px; }
+/* 两表均 table-layout:fixed（2026-10-09）：自动布局会把竖排类型列按文字长度撑到约94px导致56px失效并与sticky错位；固定布局其余列均分（动作表2026-10-08既有方案） */
+.biz-table, .action-table { table-layout: fixed; }
+.action-table { min-width: 1000px; }
+.data-table.biz-table th.name-head, .data-table.biz-table td.name-cell,
 .data-table.action-table th.name-head, .data-table.action-table td.name-cell { width: 76px; min-width: 76px; }
-.data-table.action-table th.name-head { position: sticky; left: 56px; }
-.data-table.action-table td.name-cell { position: sticky; left: 56px; }
 .data-table th.type-col { padding: 10px 2px; }
 .data-table td.type-col { padding: 10px 2px; }
-td.type-cell-pq, td.type-cell-zw {
-    writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 6px;
-}
+/* 竖排文字（2026-10-09改为span实现：writing-mode直接用在td上旧版Chromium如89会忽略导致文字水平溢出被sticky列遮挡，span在所有浏览器生效，视觉效果不变） */
+.v-text { display: inline-block; writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 6px; }
 .data-table th.type-col { position: sticky; left: 0; z-index: 3; background: #0b3a5e; background-clip: padding-box; }
-.data-table th.name-head { position: sticky; left: 40px; z-index: 3; background: #0b3a5e; background-clip: padding-box; }
+.data-table th.name-head { position: sticky; left: 56px; z-index: 3; background: #0b3a5e; background-clip: padding-box; }
 .data-table td.type-col { position: sticky; left: 0; z-index: 2; background: #12283a; }
-.data-table td.name-cell { position: sticky; left: 40px; z-index: 2; background: #12283a; }
+.data-table td.name-cell { position: sticky; left: 56px; z-index: 2; background: #12283a; }
 .data-table td.summary-type { position: sticky; left: 0; z-index: 2; background: #0d3043; }
 .summary-row td {
     background: rgba(0, 212, 255, 0.1); font-weight: 700; color: #ffffff;
@@ -276,7 +275,8 @@ td.type-cell-pq, td.type-cell-zw {
     .data-table th { padding: 8px 4px; }
     .data-table td { padding: 8px 4px; }
     .daily-table th, .daily-table td { padding: 6px 4px; }
-    td.type-cell-pq, td.type-cell-zw { letter-spacing: 4px; font-size: 12px; }
+    td.type-cell-pq, td.type-cell-zw { font-size: 12px; }
+    .v-text { letter-spacing: 4px; }
     .zb-badge { padding: 6px 10px; font-size: 12px; }
     .zb-badges { gap: 6px; }
 }
