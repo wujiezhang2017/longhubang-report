@@ -126,14 +126,19 @@ body {
 /* 装维整行统一橙色（2026-10-08） */
 .data-table tr.row-zw td { color: #ff9f43 !important; }
 .data-table tr.row-zw td.name-cell { color: #ff9f43 !important; }
-.data-table tr.row-zw td.highlight-cell { color: #ff9f43 !important; }
 .data-table tr.row-zw .incentive-link { color: #ff9f43 !important; }
+/* 团队业务/动作详情表字号放大+全部加粗（2026-10-09，电脑截图清晰度） */
+.data-table.biz-table, .data-table.action-table { font-size: 16px; }
+.data-table.biz-table td, .data-table.action-table td { font-weight: 700; }
+/* 负数/0值单元格红底白字（2026-10-09，底色同日破零未破零区间，覆盖装维橙色） */
+.data-table tr td.red-alert { color: #ffffff !important; }
+.data-table tr td.red-alert .incentive-link { color: #ffffff !important; }
 .data-table tr:hover td { background: rgba(0, 212, 255, 0.12); }
 .data-table tr:hover td.type-col, .data-table tr:hover td.name-cell { background: #1a3450; }
 .data-table tr:hover td.summary-type { background: #12405a; }
 .name-cell { font-weight: 600; color: #ffffff; text-align: center !important; }
 .highlight-cell { color: #ffd700; font-weight: 700; }
-.type-cell { font-weight: 700; text-align: center; font-size: 14px; vertical-align: middle; }
+.type-cell { font-weight: 700; text-align: center; vertical-align: middle; }
 .type-cell-pq { color: #ffffff; }
 .type-cell-zw { color: #ff9f43; }
 .name-pq { color: #ffffff; }
@@ -141,7 +146,7 @@ body {
 .rate-cell { font-weight: 700; }
 .rate-pq { color: #ffffff; }
 .rate-zw { color: #ff9f43; }
-.target-cell { color: #ffffff; font-weight: 600; font-size: 13px; }
+.target-cell { color: #ffffff; font-weight: 600; }
 .incentive-link { color: #ffffff; text-decoration: underline; font-weight: 700; cursor: pointer; }
 .incentive-link:hover { text-decoration: underline; color: #00ffff; }
 .type-col { width: 40px; min-width: 40px; }
@@ -267,7 +272,7 @@ td.type-cell-pq, td.type-cell-zw {
     .top3-rank { font-size: 26px; min-width: 32px; }
     .top3-name { font-size: 15px; }
     .top3-value { font-size: 13px; }
-    .data-table, .daily-table { font-size: 12px; }
+    .data-table, .daily-table, .data-table.biz-table, .data-table.action-table { font-size: 12px; }
     .data-table th { padding: 8px 4px; }
     .data-table td { padding: 8px 4px; }
     .daily-table th, .daily-table td { padding: 6px 4px; }
