@@ -327,16 +327,17 @@ body {
             <input class="search-input" type="text" placeholder="搜索客户姓名、客户编号、业务号码或积分描述..." oninput="filterTable(this.value)">
         </div>
         <div class="data-scroll">
-        <table class="data-table" id="incentive-table" style="min-width: 900px; width: 100%; table-layout: fixed">
+        <table class="data-table" id="incentive-table" style="min-width: 1000px; width: 100%; table-layout: fixed">
             <thead><tr>
                 <th>客户姓名</th>
                 <th>客户编号</th>
                 <th>业务号码</th>
                 <th style="width: 40%">积分描述</th>
+                <th>激励积分</th>
                 <th>激励积分汇总</th>
             </tr></thead>
-            <tbody><tr><td colspan="5" style="color:#8aa0b8;padding:28px;font-weight:400">本月暂无激励积分数据</td></tr><tr class="summary-row">
-        <td colspan="4">合计</td>
+            <tbody><tr><td colspan="6" style="color:#8aa0b8;padding:28px;font-weight:400">本月暂无激励积分数据</td></tr><tr class="summary-row">
+        <td colspan="5">合计</td>
         <td class="highlight-cell">0</td>
     </tr></tbody></table>
         </div>
