@@ -66,39 +66,47 @@ body {
     border-color: #00d4ff; box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
 }
 .rank-panel { display: none; }
-.rank-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rank-panel.active { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .rank-card {
     background: rgba(13, 27, 42, 0.6); border: 1px solid rgba(0, 212, 255, 0.15);
-    border-radius: 12px; padding: 20px; backdrop-filter: blur(10px); transition: all 0.3s;
+    border-radius: 12px; padding: 14px; backdrop-filter: blur(10px); transition: all 0.3s;
 }
 .rank-card:hover { border-color: rgba(0, 212, 255, 0.4); box-shadow: 0 0 20px rgba(0, 212, 255, 0.1); }
-.rank-card-title { font-size: 16px; font-weight: 700; color: #00d4ff; margin-bottom: 16px; text-align: center; }
+.rank-card-title { font-size: 22px; font-weight: 700; color: #00d4ff; margin-bottom: 10px; text-align: center; }
 .top-card { border-color: rgba(255, 215, 0, 0.2); }
 .bottom-card { border-color: rgba(255, 71, 87, 0.2); }
-.top3-list { display: flex; flex-direction: column; gap: 10px; }
+.top3-list { display: flex; flex-direction: column; gap: 6px; }
 .top3-item {
-    display: flex; align-items: center; gap: 16px; padding: 14px 18px;
-    border-radius: 10px; transition: all 0.3s; min-height: 56px;
+    display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 0 12px; height: 48px;
+    border-radius: 10px; transition: all 0.3s;
 }
 .top3-item:hover { transform: translateX(4px); }
 .top3-item.gold { background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.05)); border: 1px solid rgba(255,215,0,0.4); }
 .top3-item.silver { background: linear-gradient(135deg, rgba(192,192,192,0.15), rgba(192,192,192,0.03)); border: 1px solid rgba(192,192,192,0.3); }
 .top3-item.bronze { background: linear-gradient(135deg, rgba(205,127,50,0.15), rgba(205,127,50,0.03)); border: 1px solid rgba(205,127,50,0.3); }
-.top3-rank { font-size: 36px; font-weight: 900; line-height: 1; min-width: 44px; text-align: center; flex-shrink: 0; }
+.top3-rank { font-size: 36px; font-weight: 900; line-height: 1; min-width: 38px; text-align: center; flex-shrink: 0; }
 .gold .top3-rank { color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.5); }
 .silver .top3-rank { color: #c0c0c0; }
 .bronze .top3-rank { color: #cd7f32; }
-.top3-info { flex: 1; }
-.top3-name { font-size: 18px; font-weight: 700; color: #e0e6ed; margin-bottom: 2px; }
-.top3-value { font-size: 16px; font-weight: 600; color: #8aa0b8; }
-.bottom-list { display: flex; flex-direction: column; gap: 8px; }
+.top3-info { flex: 0 0 auto; display: flex; flex-direction: row; align-items: center; gap: 10px; }
+.top3-name { font-size: 36px; font-weight: 700; color: #e0e6ed; line-height: 1.1; white-space: nowrap; }
+.top3-value { font-size: 36px; font-weight: 600; color: #8aa0b8; line-height: 1.1; white-space: nowrap; }
+/* 前三名数值颜色与排名数字一致（2026-10-09） */
+.gold .top3-value { color: #ffd700; }
+.silver .top3-value { color: #c0c0c0; }
+.bronze .top3-value { color: #cd7f32; }
+/* 后三名布局参考前三（2026-10-10）：名次纯数字，PC单行/手机两行，左对齐，保留红色系 */
+.bottom-list { display: flex; flex-direction: column; gap: 6px; }
 .bottom-item {
-    display: flex; align-items: center; gap: 12px; padding: 8px 12px;
-    background: rgba(255, 71, 87, 0.08); border-radius: 6px; border-left: 3px solid rgba(255, 71, 87, 0.5);
+    display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 0 12px; height: 48px;
+    border-radius: 10px; transition: all 0.3s;
+    background: rgba(255, 71, 87, 0.08); border-left: 3px solid rgba(255, 71, 87, 0.5);
 }
-.bottom-rank { font-size: 13px; font-weight: 700; color: #ff6b7a; min-width: 42px; }
-.bottom-name { font-size: 14px; flex: 1; color: #d0d8e0; }
-.bottom-value { font-size: 14px; font-weight: 600; color: #ff6b7a; }
+.bottom-item:hover { transform: translateX(4px); }
+.bottom-rank { font-size: 36px; font-weight: 900; line-height: 1; min-width: 38px; text-align: center; flex-shrink: 0; color: #ff6b7a; }
+.bottom-info { flex: 0 0 auto; display: flex; flex-direction: row; align-items: center; gap: 10px; }
+.bottom-name { font-size: 36px; font-weight: 700; color: #d0d8e0; line-height: 1.1; white-space: nowrap; }
+.bottom-value { font-size: 36px; font-weight: 600; color: #ff6b7a; line-height: 1.1; white-space: nowrap; }
 .data-scroll {
     overflow-x: auto; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.15);
     background: rgba(13, 27, 42, 0.4); max-width: 100%;
@@ -112,30 +120,33 @@ body {
 .data-table th {
     background: rgba(0, 153, 255, 0.15); color: #ffffff; padding: 10px 8px;
     text-align: center; font-weight: 700; border-bottom: 2px solid rgba(0, 212, 255, 0.45);
-    border-right: 1px solid rgba(0, 212, 255, 0.45);
+    border-right: 1px solid rgba(0, 212, 255, 0.45); background-clip: padding-box;
     white-space: normal; word-break: break-all; line-height: 1.3;
 }
 .data-table th:last-child { border-right: none; }
 .data-table thead tr:first-child th { border-bottom: 1px solid rgba(0, 212, 255, 0.45); }
 .data-table td {
-    padding: 10px 8px; text-align: center;
-    border-right: 1px solid rgba(0, 212, 255, 0.22);
-    border-bottom: 1px solid rgba(0, 212, 255, 0.22);
-    white-space: nowrap;
+    padding: 10px 8px; text-align: center; border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    border-right: 1px solid rgba(0, 212, 255, 0.3); white-space: nowrap;
 }
 .data-table td:last-child { border-right: none; }
 .data-table td.name-cell { color: #ffffff !important; }
 /* 装维整行统一橙色（2026-10-08） */
 .data-table tr.row-zw td { color: #ff9f43 !important; }
 .data-table tr.row-zw td.name-cell { color: #ff9f43 !important; }
-.data-table tr.row-zw td.highlight-cell { color: #ff9f43 !important; }
 .data-table tr.row-zw .incentive-link { color: #ff9f43 !important; }
+/* 团队业务/动作详情表字号再放大（2026-10-11：16→18px） */
+.data-table.biz-table, .data-table.action-table { font-size: 18px; }
+.data-table.biz-table td, .data-table.action-table td { font-weight: 700; }
+/* 负数/0值单元格红底白字（2026-10-09，底色同日破零未破零区间，覆盖装维橙色） */
+.data-table tr td.red-alert { color: #ffffff !important; }
+.data-table tr td.red-alert .incentive-link { color: #ffffff !important; }
 .data-table tr:hover td { background: rgba(0, 212, 255, 0.12); }
 .data-table tr:hover td.type-col, .data-table tr:hover td.name-cell { background: #1a3450; }
 .data-table tr:hover td.summary-type { background: #12405a; }
 .name-cell { font-weight: 600; color: #ffffff; text-align: center !important; }
 .highlight-cell { color: #ffd700; font-weight: 700; }
-.type-cell { font-weight: 700; text-align: center; font-size: 14px; vertical-align: middle; }
+.type-cell { font-weight: 700; text-align: center; vertical-align: middle; }
 .type-cell-pq { color: #ffffff; }
 .type-cell-zw { color: #ff9f43; }
 .name-pq { color: #ffffff; }
@@ -143,29 +154,28 @@ body {
 .rate-cell { font-weight: 700; }
 .rate-pq { color: #ffffff; }
 .rate-zw { color: #ff9f43; }
-.target-cell { color: #ffffff; font-weight: 600; font-size: 13px; }
+.target-cell { color: #ffffff; font-weight: 600; }
 .incentive-link { color: #ffffff; text-decoration: underline; font-weight: 700; cursor: pointer; }
 .incentive-link:hover { text-decoration: underline; color: #00ffff; }
-.type-col { width: 40px; min-width: 40px; }
-/* 团队动作详情表列宽：类型加宽、姓名变窄、其余均分（2026-10-08） */
-.action-table { table-layout: fixed; min-width: 1000px; }
-.action-table .type-col { width: 56px; min-width: 56px; }
-.action-table th.name-head, .action-table td.name-cell { width: 76px; min-width: 76px; }
-.data-table.action-table th.name-head { left: 56px; }
-.data-table.action-table td.name-cell { left: 56px; }
+/* 类型/姓名列宽两个详情表统一（2026-10-09）：类型列56px、姓名列76px，sticky偏移同步56px */
+.type-col { width: 56px; min-width: 56px; }
+/* 两表均 table-layout:fixed（2026-10-09）：自动布局会把竖排类型列按文字长度撑到约94px导致56px失效并与sticky错位；固定布局其余列均分（动作表2026-10-08既有方案） */
+.biz-table, .action-table { table-layout: fixed; }
+.action-table { min-width: 1000px; }
+.data-table.biz-table th.name-head, .data-table.biz-table td.name-cell,
+.data-table.action-table th.name-head, .data-table.action-table td.name-cell { width: 76px; min-width: 76px; }
 .data-table th.type-col { padding: 10px 2px; }
 .data-table td.type-col { padding: 10px 2px; }
-td.type-cell-pq, td.type-cell-zw {
-    writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 6px;
-}
-.data-table th.type-col { position: sticky; left: 0; z-index: 3; background: #0b3a5e; }
-.data-table th.name-head { position: sticky; left: 40px; z-index: 3; background: #0b3a5e; }
+/* 竖排文字（2026-10-09改为span实现：writing-mode直接用在td上旧版Chromium如89会忽略导致文字水平溢出被sticky列遮挡，span在所有浏览器生效，视觉效果不变） */
+.v-text { display: inline-block; writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 6px; }
+.data-table th.type-col { position: sticky; left: 0; z-index: 3; background: #0b3a5e; background-clip: padding-box; }
+.data-table th.name-head { position: sticky; left: 56px; z-index: 3; background: #0b3a5e; background-clip: padding-box; }
 .data-table td.type-col { position: sticky; left: 0; z-index: 2; background: #12283a; }
-.data-table td.name-cell { position: sticky; left: 40px; z-index: 2; background: #12283a; }
+.data-table td.name-cell { position: sticky; left: 56px; z-index: 2; background: #12283a; }
 .data-table td.summary-type { position: sticky; left: 0; z-index: 2; background: #0d3043; }
 .summary-row td {
     background: rgba(0, 212, 255, 0.1); font-weight: 700; color: #ffffff;
-    border-top: 2px solid rgba(0, 212, 255, 0.3);
+    border-top: 2px solid rgba(0, 212, 255, 0.45);
 }
 .summary-row td.highlight-cell { color: #ffffff; }
 .summary-type { color: #ffffff; }
@@ -210,9 +220,9 @@ td.type-cell-pq, td.type-cell-zw {
 .daily-scroll::-webkit-scrollbar-thumb { background: rgba(0, 212, 255, 0.3); border-radius: 4px; }
 .daily-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0, 212, 255, 0.5); }
 .daily-table {
-    border-collapse: separate; border-spacing: 0; font-size: 14px; white-space: nowrap; table-layout: fixed; width: 100%;
+    border-collapse: separate; border-spacing: 0; font-size: 16px; white-space: nowrap; table-layout: fixed; width: 100%;
 }
-.daily-table th, .daily-table td { padding: 8px 6px; text-align: center; border-right: 1px solid rgba(0, 212, 255, 0.25); border-bottom: 1px solid rgba(0, 212, 255, 0.25); }
+.daily-table th, .daily-table td { padding: 8px 6px; text-align: center; border-bottom: 1px solid rgba(0, 212, 255, 0.3); border-right: 1px solid rgba(0, 212, 255, 0.3); }
 .daily-table th:last-child, .daily-table td:last-child { border-right: none; }
 .daily-table thead th { position: sticky; top: 0; z-index: 1; background: rgba(0, 153, 255, 0.2); color: #ffffff; font-weight: 700; }
 .daily-table .col-type { position: sticky; left: 0; z-index: 2; background: #0d1b2a; width: 40px; vertical-align: middle; }
@@ -228,6 +238,9 @@ td.type-cell-pq, td.type-cell-zw {
 .col-day { width: auto; }
 .has-data { color: #2ed573; font-weight: 600; background: rgba(46, 213, 115, 0.08); }
 .no-data { color: rgba(255,255,255,0.15); }
+/* 2026-10-13：激励积分详情页 rowspan 合并版中，同客户组内行的激励积分格会被 td:last-child{border-right:none} 误伤
+（组内行仅 3 格，last-child 落在逻辑第 5 列而非表尾），此规则恢复其右边框，保证汇总合并块左边界竖线不缺 */
+.data-table td.mid-pts { border-right: 1px solid rgba(0, 212, 255, 0.3); }
 .red-alert { background: rgba(255, 48, 66, 0.85) !important; color: #ffffff; font-weight: 800; }
 .daily-table tr:hover td.red-alert { background: rgba(255, 48, 66, 0.95) !important; }
 .daily-table tr:hover td { background: rgba(0, 212, 255, 0.12); }
@@ -243,14 +256,16 @@ td.type-cell-pq, td.type-cell-zw {
 @media (max-width: 1200px) {
     .header h1 { font-size: 38px; letter-spacing: 4px; }
     .top3-rank { font-size: 32px; }
-    .rank-card { padding: 16px; }
+    .bottom-rank { font-size: 32px; }
+    .top3-name, .top3-value, .bottom-name, .bottom-value { font-size: 32px; }
+    .rank-card { padding: 12px; }
     .section { margin-bottom: 28px; }
 }
 @media (max-width: 1024px) {
     body { padding: 14px; }
     .header h1 { font-size: 32px; letter-spacing: 4px; }
     .section-title { font-size: 18px; }
-    .rank-panel.active { grid-template-columns: 1fr; }
+    .rank-panel.active { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 }
 @media (max-width: 768px) {
     body { padding: 12px; }
@@ -263,17 +278,25 @@ td.type-cell-pq, td.type-cell-zw {
     .section-title { font-size: 16px; flex-wrap: wrap; }
     .section-sub { font-size: 11px; }
     .tab-btn { padding: 8px 18px; font-size: 13px; }
-    .rank-panel.active { grid-template-columns: 1fr; }
-    .rank-card { padding: 14px; }
-    .top3-item { padding: 10px 12px; gap: 10px; min-height: 48px; }
+    .rank-panel.active { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .rank-card { padding: 10px; }
+    .rank-card-title { font-size: 16px; margin-bottom: 8px; }
+    .top3-item { height: auto; padding: 5px 10px; gap: 8px; min-height: 38px; justify-content: flex-start; }
+    .top3-info { flex-direction: column; gap: 0; align-items: flex-start; }
     .top3-rank { font-size: 26px; min-width: 32px; }
-    .top3-name { font-size: 15px; }
+    .top3-name { font-size: 15px; margin-bottom: 2px; }
     .top3-value { font-size: 13px; }
-    .data-table, .daily-table { font-size: 12px; }
+    .bottom-item { height: auto; padding: 5px 10px; gap: 8px; min-height: 38px; justify-content: flex-start; }
+    .bottom-info { flex-direction: column; gap: 0; align-items: flex-start; }
+    .bottom-rank { font-size: 26px; min-width: 32px; }
+    .bottom-name { font-size: 15px; margin-bottom: 2px; }
+    .bottom-value { font-size: 13px; }
+    .data-table, .daily-table, .data-table.biz-table, .data-table.action-table { font-size: 14px; }
     .data-table th { padding: 8px 4px; }
     .data-table td { padding: 8px 4px; }
     .daily-table th, .daily-table td { padding: 6px 4px; }
-    td.type-cell-pq, td.type-cell-zw { letter-spacing: 4px; font-size: 12px; }
+    td.type-cell-pq, td.type-cell-zw { font-size: 14px; }
+    .v-text { letter-spacing: 4px; }
     .zb-badge { padding: 6px 10px; font-size: 12px; }
     .zb-badges { gap: 6px; }
 }
@@ -307,16 +330,17 @@ td.type-cell-pq, td.type-cell-zw {
             <input class="search-input" type="text" placeholder="搜索客户姓名、客户编号、业务号码或积分描述..." oninput="filterTable(this.value)">
         </div>
         <div class="data-scroll">
-        <table class="data-table" id="incentive-table" style="min-width: 900px; width: 100%; table-layout: fixed">
+        <table class="data-table" id="incentive-table" style="min-width: 1000px; width: 100%; table-layout: fixed">
             <thead><tr>
                 <th>客户姓名</th>
                 <th>客户编号</th>
                 <th>业务号码</th>
                 <th style="width: 40%">积分描述</th>
+                <th>激励积分</th>
                 <th>激励积分汇总</th>
             </tr></thead>
-            <tbody><tr><td rowspan="1">古**</td><td rowspan="1">2020105374878100</td><td>181****5835</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">T+3变为不活跃，按T+1的35%扣回激励积分</td><td rowspan="1" class="highlight-cell">-97.3</td></tr><tr><td rowspan="1">欧***</td><td rowspan="1">2020105471642100</td><td>180****2912</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">T+3变为不活跃，按T+1的35%扣回激励积分</td><td rowspan="1" class="highlight-cell">-30.98</td></tr><tr><td rowspan="1">许**</td><td rowspan="1">2020278323300000</td><td>190****2250</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">T+3变为不活跃，按T+1的35%扣回激励积分</td><td rowspan="1" class="highlight-cell">-15.23</td></tr><tr><td rowspan="1">朱**</td><td rowspan="1">2020105534169100</td><td>133****1763</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未绑定企业微信扣20分。</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">广************</td><td rowspan="1">2020370570940000</td><td>133****1713</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="3">黄**</td><td rowspan="3">2020105641368100</td><td>180****0504</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">针对非城中村新入网单品合约和融合，非满卡扣罚50元（分）/户。</td><td rowspan="3" class="highlight-cell">216.95</td></tr><tr><td>180****0504</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">非FTTR/非合约129及以上，激励积分为2倍礼包价值=2*199=398,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td></tr><tr><td>ADSLD26****6980</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-404-01-38积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td></tr><tr><td rowspan="2">李**</td><td rowspan="2">2020105651125100</td><td>180****9702</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">非合约129以下，激励积分1.5倍套餐主体积分=1.5*39=58.5</td><td rowspan="2" class="highlight-cell">38.5</td></tr><tr><td>180****9702</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未办理托收业务扣20分。</td></tr><tr><td rowspan="2">谢**</td><td rowspan="2">2020201305220000</td><td>ADSLD26****5431</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-1积分为0.75,本号码分摊积分为0.75,导向系数为1 T+1发放100%</td><td rowspan="2" class="highlight-cell">58.28</td></tr><tr><td>137****9954</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">非礼包129以下，激励积分为1.5倍套餐主体积分=1.5*59=88.5,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td></tr><tr><td rowspan="2">邱**</td><td rowspan="2">2020604137490000</td><td>ADSLD26****3180</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-404-01-38积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td><td rowspan="2" class="highlight-cell">286.25</td></tr><tr><td>137****6654</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">非礼包129及以上，激励积分2倍套餐主体积分=2*139=278</td></tr><tr><td rowspan="1">崔*</td><td rowspan="1">3020131080160000</td><td>ADSLD25****2874</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">主推改高套，激励积分为提值部分40*2。</td><td rowspan="1" class="highlight-cell">80</td></tr><tr><td rowspan="2">农*</td><td rowspan="2">2020753517790000</td><td>ADSLD26****7105</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">基础激励=1倍价值积分。,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td><td rowspan="2" class="highlight-cell">27.75</td></tr><tr><td>ADSLD26****7105</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-404-01-38积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td></tr><tr><td rowspan="1">L**********</td><td rowspan="1">2020104690056100</td><td>190****5434</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">本月套餐主体积分：19，上月套餐主体积分：59，本月提值积分：-40</td><td rowspan="1" class="highlight-cell">-40</td></tr><tr><td rowspan="7">樊*</td><td rowspan="7">2020105535599100</td><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-3积分为5.75,本号码分摊积分为5.75,导向系数为1 T+1发放100%</td><td rowspan="7" class="highlight-cell">95.75</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0002-440-1-13积分为68,本号码分摊积分为68,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0002-440-1-2积分为10,本号码分摊积分为10,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0002-440-1-8积分为5,本号码分摊积分为5,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0002-443-1-5积分为15,本号码分摊积分为15,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0002-446-1-3积分为-58,本号码分摊积分为-58,导向系数为3 T+1发放100%</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0003-432-1-2积分为-10,本号码分摊积分为-10,导向系数为3 T+1发放100%</td></tr><tr><td rowspan="1">广*************</td><td rowspan="1">2020312000540000</td><td>133****2874</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">T+3变为不活跃，按T+1的35%扣回激励积分</td><td rowspan="1" class="highlight-cell">-415.28</td></tr><tr><td rowspan="1">广*************</td><td rowspan="1">2020105013361100</td><td>189****4624</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="1">田**</td><td rowspan="1">2020105592805100</td><td>199****0454</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未绑定企业微信扣20分。</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">傅**</td><td rowspan="1">2020429139440000</td><td>181****1400</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="1">方**</td><td rowspan="1">2020105615984100</td><td>153****3750</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未绑定企业微信扣20分。</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">陈**</td><td rowspan="1">2020329781760000</td><td>137****5087</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未绑定企业微信扣20分。</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">L***********</td><td rowspan="1">2020104683525100</td><td>190****6228</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">本月套餐主体积分：19，上月套餐主体积分：59，本月提值积分：-40</td><td rowspan="1" class="highlight-cell">-40</td></tr><tr class="summary-row">
-        <td colspan="4">合计</td>
+            <tbody><tr><td rowspan="1">古**</td><td rowspan="1">2020105374878100</td><td>181****5835</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">T+3变为不活跃，按T+1的35%扣回激励积分</td><td class="mid-pts">-97.3</td><td rowspan="1" class="highlight-cell">-97.3</td></tr><tr><td rowspan="1">欧***</td><td rowspan="1">2020105471642100</td><td>180****2912</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">T+3变为不活跃，按T+1的35%扣回激励积分</td><td class="mid-pts">-30.98</td><td rowspan="1" class="highlight-cell">-30.98</td></tr><tr><td rowspan="1">许**</td><td rowspan="1">2020278323300000</td><td>190****2250</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">T+3变为不活跃，按T+1的35%扣回激励积分</td><td class="mid-pts">-15.23</td><td rowspan="1" class="highlight-cell">-15.23</td></tr><tr><td rowspan="1">朱**</td><td rowspan="1">2020105534169100</td><td>133****1763</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未绑定企业微信扣20分。</td><td class="mid-pts">-20</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">广************</td><td rowspan="1">2020370570940000</td><td>133****1713</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td class="mid-pts">20</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="3">黄**</td><td rowspan="3">2020105641368100</td><td>180****0504</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">针对非城中村新入网单品合约和融合，非满卡扣罚50元（分）/户。</td><td class="mid-pts">-50</td><td rowspan="3" class="highlight-cell">216.95</td></tr><tr><td>180****0504</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">非FTTR/非合约129及以上，激励积分为2倍礼包价值=2*199=398,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td><td class="mid-pts">258.7</td></tr><tr><td>ADSLD26****6980</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-404-01-38积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td><td class="mid-pts">8.25</td></tr><tr><td rowspan="2">李**</td><td rowspan="2">2020105651125100</td><td>180****9702</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">非合约129以下，激励积分1.5倍套餐主体积分=1.5*39=58.5</td><td class="mid-pts">58.5</td><td rowspan="2" class="highlight-cell">38.5</td></tr><tr><td>180****9702</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未办理托收业务扣20分。</td><td class="mid-pts">-20</td></tr><tr><td rowspan="2">谢**</td><td rowspan="2">2020201305220000</td><td>ADSLD26****5431</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-1积分为0.75,本号码分摊积分为0.75,导向系数为1 T+1发放100%</td><td class="mid-pts">0.75</td><td rowspan="2" class="highlight-cell">58.28</td></tr><tr><td>137****9954</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">非礼包129以下，激励积分为1.5倍套餐主体积分=1.5*59=88.5,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td><td class="mid-pts">57.53</td></tr><tr><td rowspan="2">邱**</td><td rowspan="2">2020604137490000</td><td>ADSLD26****3180</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-404-01-38积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td><td class="mid-pts">8.25</td><td rowspan="2" class="highlight-cell">286.25</td></tr><tr><td>137****6654</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">非礼包129及以上，激励积分2倍套餐主体积分=2*139=278</td><td class="mid-pts">278</td></tr><tr><td rowspan="1">崔*</td><td rowspan="1">3020131080160000</td><td>ADSLD25****2874</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">主推改高套，激励积分为提值部分40*2。</td><td class="mid-pts">80</td><td rowspan="1" class="highlight-cell">80</td></tr><tr><td rowspan="2">农*</td><td rowspan="2">2020753517790000</td><td>ADSLD26****7105</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">基础激励=1倍价值积分。,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td><td class="mid-pts">19.5</td><td rowspan="2" class="highlight-cell">27.75</td></tr><tr><td>ADSLD26****7105</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-404-01-38积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td><td class="mid-pts">8.25</td></tr><tr><td rowspan="1">L**********</td><td rowspan="1">2020104690056100</td><td>190****5434</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">本月套餐主体积分：19，上月套餐主体积分：59，本月提值积分：-40</td><td class="mid-pts">-40</td><td rowspan="1" class="highlight-cell">-40</td></tr><tr><td rowspan="7">樊*</td><td rowspan="7">2020105535599100</td><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-3积分为5.75,本号码分摊积分为5.75,导向系数为1 T+1发放100%</td><td class="mid-pts">5.75</td><td rowspan="7" class="highlight-cell">95.75</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0002-440-1-13积分为68,本号码分摊积分为68,导向系数为3 T+1发放100%</td><td class="mid-pts">204</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0002-440-1-2积分为10,本号码分摊积分为10,导向系数为3 T+1发放100%</td><td class="mid-pts">30</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0002-440-1-8积分为5,本号码分摊积分为5,导向系数为3 T+1发放100%</td><td class="mid-pts">15</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0002-443-1-5积分为15,本号码分摊积分为15,导向系数为3 T+1发放100%</td><td class="mid-pts">45</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0002-446-1-3积分为-58,本号码分摊积分为-58,导向系数为3 T+1发放100%</td><td class="mid-pts">-174</td></tr><tr><td>TYSL84401001****4256</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品ZH0003-432-1-2积分为-10,本号码分摊积分为-10,导向系数为3 T+1发放100%</td><td class="mid-pts">-30</td></tr><tr><td rowspan="1">广*************</td><td rowspan="1">2020312000540000</td><td>133****2874</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">T+3变为不活跃，按T+1的35%扣回激励积分</td><td class="mid-pts">-415.28</td><td rowspan="1" class="highlight-cell">-415.28</td></tr><tr><td rowspan="1">广*************</td><td rowspan="1">2020105013361100</td><td>189****4624</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td class="mid-pts">20</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="1">田**</td><td rowspan="1">2020105592805100</td><td>199****0454</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未绑定企业微信扣20分。</td><td class="mid-pts">-20</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">傅**</td><td rowspan="1">2020429139440000</td><td>181****1400</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td class="mid-pts">20</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="1">方**</td><td rowspan="1">2020105615984100</td><td>153****3750</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未绑定企业微信扣20分。</td><td class="mid-pts">-20</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">陈**</td><td rowspan="1">2020329781760000</td><td>137****5087</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未绑定企业微信扣20分。</td><td class="mid-pts">-20</td><td rowspan="1" class="highlight-cell">-20</td></tr><tr><td rowspan="1">L***********</td><td rowspan="1">2020104683525100</td><td>190****6228</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">本月套餐主体积分：19，上月套餐主体积分：59，本月提值积分：-40</td><td class="mid-pts">-40</td><td rowspan="1" class="highlight-cell">-40</td></tr><tr class="summary-row">
+        <td>合计</td><td></td><td></td><td></td><td></td>
         <td class="highlight-cell">144.69</td>
     </tr></tbody></table>
         </div>
