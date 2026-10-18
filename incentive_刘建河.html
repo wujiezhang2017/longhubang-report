@@ -161,7 +161,7 @@ body {
 .type-col { width: 56px; min-width: 56px; }
 /* 两表均 table-layout:fixed（2026-10-09）：自动布局会把竖排类型列按文字长度撑到约94px导致56px失效并与sticky错位；固定布局其余列均分（动作表2026-10-08既有方案） */
 .biz-table, .action-table { table-layout: fixed; }
-.action-table { min-width: 1000px; }
+.action-table { min-width: 1100px; }  /* 2026-10-15 生态执行加物管拓展列(12列)后自1000px加宽 */
 .data-table.biz-table th.name-head, .data-table.biz-table td.name-cell,
 .data-table.action-table th.name-head, .data-table.action-table td.name-cell { width: 76px; min-width: 76px; }
 .data-table th.type-col { padding: 10px 2px; }
