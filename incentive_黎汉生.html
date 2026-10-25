@@ -160,8 +160,16 @@ body {
 .type-col { width: 56px; min-width: 56px; }
 /* 两表均 table-layout:fixed（2026-10-09）：自动布局会把竖排类型列按文字长度撑到约94px导致56px失效并与sticky错位；固定布局其余列均分（动作表2026-10-08既有方案） */
 .biz-table, .action-table { table-layout: fixed; }
-/* 业务表22列（2026-10-25 加3列扣罚后）需更宽画布，避免新列过窄 */
+/* 业务表22列布局（2026-10-25 用户要求 PC 端一屏展示、不横滑）：
+   ≥1200px 取消最小宽（width:100%+fixed 均分）+单元格内边距收紧+JS 自动缩字号（fitBizCells）；
+   <1200px（平板/手机）保持 1650px 横向滚动 */
 .data-table.biz-table { min-width: 1650px; }
+@media (min-width: 1280px) {
+    .data-table.biz-table { min-width: 100%; }
+    .data-table.biz-table th, .data-table.biz-table td { padding: 8px 3px; }
+    /* 表头字号略小（td 保持 18px），保证最长 7 字表头不超过 3 行（2026-10-25 用户要求） */
+    .data-table.biz-table thead th { font-size: 16px; }
+}
 .action-table { min-width: 1100px; }  /* 2026-10-15 生态执行加物管拓展列(12列)后自1000px加宽 */
 .data-table.biz-table th.name-head, .data-table.biz-table td.name-cell,
 .data-table.action-table th.name-head, .data-table.action-table td.name-cell { width: 76px; min-width: 76px; }
