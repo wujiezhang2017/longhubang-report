@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陈学贤 - 激励积分清单</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+    background: #f5f7fa;
+    color: #1f2937; min-height: 100vh; padding: 20px;
+}
+.container { max-width: 1400px; margin: 0 auto; padding-bottom: 60px; }
+.header { padding: 30px 20px 20px; text-align: center; }
+.title-wrap { display: inline-flex; flex-direction: column; align-items: stretch; max-width: 100%; }
+.header h1 {
+    font-size: 44px; font-weight: 800; letter-spacing: 6px; margin: 0;
+    background: linear-gradient(135deg, #0099ff, #0066cc, #0099ff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+}
+.header .glow-line {
+    width: 100%; height: 3px; margin-top: 10px;
+    background: linear-gradient(90deg, transparent, #0099ff 10%, #0099ff 90%, transparent);
+}
+.timestamps { display: flex; justify-content: center; gap: 30px; font-size: 14px; color: #0066cc; margin-top: 12px; }
+.timestamps span {
+    background: #e8f4fd; border: 1px solid #b3dcf7;
+    padding: 6px 18px; border-radius: 20px;
+}
+.timestamps span::before {
+    content: ''; display: inline-block; width: 8px; height: 8px;
+    border-radius: 50%; background: #0099ff; margin-right: 8px;
+}
+#archive-select {
+    display: none;
+    background: #e8f4fd; border: 1px solid #b3dcf7;
+    color: #0066cc; padding: 6px 14px; border-radius: 20px; font-size: 14px;
+    cursor: pointer; outline: none; font-family: inherit;
+}
+#archive-select option { background: #ffffff; color: #1f2937; }
+#archive-select::before { content: ''; }
+#archive-select option:first-child { color: #64748b; }
+.section { margin-bottom: 36px; }
+.section-title {
+    font-size: 20px; font-weight: 700; color: #1f2937; margin-bottom: 16px;
+    padding-left: 14px; border-left: 4px solid #0099ff;
+    display: flex; align-items: center; gap: 10px;
+}
+.section-title::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(0,153,255,0.35), transparent);
+}
+.section-sub { font-size: 13px; font-weight: 400; color: #64748b; white-space: nowrap; }
+.tab-switcher { display: flex; gap: 12px; margin-bottom: 20px; }
+.tab-btn {
+    padding: 10px 32px; border: 1px solid #cbd5e1;
+    background: #ffffff; color: #64748b;
+    border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.3s;
+}
+.tab-btn:hover { background: #e8f4fd; color: #0066cc; }
+.tab-btn.active {
+    background: linear-gradient(135deg, #0099ff, #0066cc); color: #ffffff;
+    border-color: #0099ff; box-shadow: 0 2px 8px rgba(0, 122, 204, 0.3);
+}
+.rank-panel { display: none; }
+.rank-panel.active { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.rank-card {
+    background: #ffffff; border: 1px solid #e2e8f0;
+    border-radius: 12px; padding: 14px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06); transition: all 0.3s;
+}
+.rank-card:hover { border-color: #0099ff; box-shadow: 0 4px 12px rgba(0, 122, 204, 0.12); }
+.rank-card-title { font-size: 22px; font-weight: 700; color: #0066cc; margin-bottom: 10px; text-align: center; }
+.top-card { border-color: #d4a017; }
+.bottom-card { border-color: #fca5a5; }
+.top3-list { display: flex; flex-direction: column; gap: 6px; }
+.top3-item {
+    display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 0 12px; height: 48px;
+    border-radius: 10px; transition: all 0.3s;
+}
+.top3-item:hover { transform: translateX(4px); }
+.top3-item.gold { background: linear-gradient(135deg, #fff8e1, #fffdf5); border: 1px solid #d4a017; }
+.top3-item.silver { background: linear-gradient(135deg, #f1f5f9, #f8fafc); border: 1px solid #94a3b8; }
+.top3-item.bronze { background: linear-gradient(135deg, #fdf3ec, #fefaf6); border: 1px solid #b06d28; }
+.top3-rank { font-size: 36px; font-weight: 900; line-height: 1; min-width: 38px; text-align: center; flex-shrink: 0; }
+.gold .top3-rank { color: #b8860b; }
+.silver .top3-rank { color: #64748b; }
+.bronze .top3-rank { color: #a0522d; }
+.top3-info { flex: 0 0 auto; display: flex; flex-direction: row; align-items: center; gap: 10px; }
+.top3-name { font-size: 36px; font-weight: 700; color: #1f2937; line-height: 1.1; white-space: nowrap; }
+.top3-value { font-size: 36px; font-weight: 600; color: #475569; line-height: 1.1; white-space: nowrap; }
+/* 前三名数值颜色与排名数字一致（2026-10-09；2026-10-24 白底主题色值加深） */
+.gold .top3-value { color: #b8860b; }
+.silver .top3-value { color: #64748b; }
+.bronze .top3-value { color: #a0522d; }
+/* 后三名布局参考前三（2026-10-10）：名次纯数字，PC单行/手机两行，左对齐，保留红色系 */
+.bottom-list { display: flex; flex-direction: column; gap: 6px; }
+.bottom-item {
+    display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 0 12px; height: 48px;
+    border-radius: 10px; transition: all 0.3s;
+    background: #fef2f2; border-left: 3px solid #ef4444;
+}
+.bottom-item:hover { transform: translateX(4px); }
+.bottom-rank { font-size: 36px; font-weight: 900; line-height: 1; min-width: 38px; text-align: center; flex-shrink: 0; color: #dc2626; }
+.bottom-info { flex: 0 0 auto; display: flex; flex-direction: row; align-items: center; gap: 10px; }
+.bottom-name { font-size: 36px; font-weight: 700; color: #1f2937; line-height: 1.1; white-space: nowrap; }
+.bottom-value { font-size: 36px; font-weight: 600; color: #dc2626; line-height: 1.1; white-space: nowrap; }
+.data-scroll {
+    overflow-x: auto; border-radius: 10px; border: 1px solid #e2e8f0;
+    background: #ffffff; max-width: 100%;
+}
+.data-scroll::-webkit-scrollbar { height: 8px; }
+.data-scroll::-webkit-scrollbar-track { background: #eef2f7; }
+.data-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+.data-table {
+    width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; min-width: 1400px;
+}
+.data-table th {
+    background: #0d4f7c; color: #ffffff; padding: 10px 8px;
+    text-align: center; font-weight: 700; border-bottom: 2px solid #ffffff;
+    border-right: 1px solid #ffffff; background-clip: padding-box;
+    white-space: normal; word-break: break-all; line-height: 1.3;
+}
+.data-table th:last-child { border-right: none; }
+.data-table thead tr:first-child th { border-bottom: 1px solid #ffffff; }
+.data-table td {
+    padding: 10px 8px; text-align: center; border-bottom: 1px solid #d7e3ee;
+    border-right: 1px solid #d7e3ee; white-space: nowrap;
+}
+.data-table td:last-child { border-right: none; }
+.data-table td.name-cell { color: #ffffff !important; }
+/* 装维行标识（2026-10-08 起装维行特殊色；2026-10-25 定稿：仅用浅橙底#ffedd5标识装维，全部字体颜色与片区经理一致——类型/姓名白字、数据格深字#1f2937、链接#0d4f7c；红底白字警示格仍优先覆盖） */
+.data-table tr.row-zw td:not(.type-col):not(.name-cell) { background: #ffedd5; }
+/* 团队业务/动作详情表字号再放大（2026-10-11：16→18px） */
+.data-table.biz-table, .data-table.action-table { font-size: 18px; }
+.data-table.biz-table td, .data-table.action-table td { font-weight: 700; }
+/* 负数/0值单元格红底白字（2026-10-09，底色同日破零未破零区间，覆盖装维橙色） */
+.data-table tr td.red-alert { color: #ffffff !important; }
+.data-table tr td.red-alert .incentive-link { color: #ffffff !important; }
+.data-table tr:hover td { background: #eaf3fb; }
+.data-table tr:hover td.type-col, .data-table tr:hover td.name-cell { background: #0a4468; }
+.data-table tr:hover td.summary-type { background: #093f66; }
+.name-cell { font-weight: 600; color: #ffffff; text-align: center !important; }
+.highlight-cell { color: #0d4f7c; font-weight: 700; }
+/* 详情页激励积分汇总：正数深蓝（同表头底色）；负数深红底白字显眼（2026-10-25 用户要求） */
+.highlight-cell.hl-neg { background: #c53030; color: #ffffff; }
+.type-cell { font-weight: 700; text-align: center; vertical-align: middle; }
+.type-cell-pq { color: #ffffff; }
+.type-cell-zw { color: #ffffff; }
+.name-pq { color: #ffffff; }
+.name-zw { color: #ffffff; }
+.rate-cell { font-weight: 700; }
+.rate-pq { color: #1f2937; }
+.rate-zw { color: #1f2937; }
+.target-cell { color: #1f2937; font-weight: 600; }
+.incentive-link { color: #0d4f7c; text-decoration: underline; font-weight: 700; cursor: pointer; }
+.incentive-link:hover { text-decoration: underline; color: #0099ff; }
+/* 类型/姓名列宽两个详情表统一（2026-10-09）：类型列56px、姓名列76px，sticky偏移同步56px */
+.type-col { width: 56px; min-width: 56px; }
+/* 两表均 table-layout:fixed（2026-10-09）：自动布局会把竖排类型列按文字长度撑到约94px导致56px失效并与sticky错位；固定布局其余列均分（动作表2026-10-08既有方案） */
+.biz-table, .action-table { table-layout: fixed; }
+/* 业务表22列布局（2026-10-25 用户要求 PC 端一屏展示、不横滑）：
+   ≥1200px 取消最小宽（width:100%+fixed 均分）+单元格内边距收紧+JS 自动缩字号（fitBizCells）；
+   <1200px（平板/手机）保持 1650px 横向滚动 */
+.data-table.biz-table { min-width: 1650px; }
+@media (min-width: 1280px) {
+    .data-table.biz-table { min-width: 100%; }
+    .data-table.biz-table th, .data-table.biz-table td { padding: 8px 3px; }
+    /* 表头字号略小（td 保持 18px），保证最长 7 字表头不超过 3 行（2026-10-25 用户要求） */
+    .data-table.biz-table thead th { font-size: 16px; }
+}
+.action-table { min-width: 1100px; }  /* 2026-10-15 生态执行加物管拓展列(12列)后自1000px加宽 */
+.data-table.biz-table th.name-head, .data-table.biz-table td.name-cell,
+.data-table.action-table th.name-head, .data-table.action-table td.name-cell { width: 76px; min-width: 76px; }
+.data-table th.type-col { padding: 10px 2px; }
+.data-table td.type-col { padding: 10px 2px; }
+/* 竖排文字（2026-10-09改为span实现：writing-mode直接用在td上旧版Chromium如89会忽略导致文字水平溢出被sticky列遮挡，span在所有浏览器生效，视觉效果不变） */
+.v-text { display: inline-block; writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 6px; }
+.data-table th.type-col { position: sticky; left: 0; z-index: 3; background: #0d4f7c; background-clip: padding-box; }
+.data-table th.name-head { position: sticky; left: 56px; z-index: 3; background: #0d4f7c; background-clip: padding-box; }
+.data-table td.type-col { position: sticky; left: 0; z-index: 2; background: #0d4f7c; }
+.data-table td.name-cell { position: sticky; left: 56px; z-index: 2; background: #0d4f7c; }
+.data-table td.summary-type { position: sticky; left: 0; z-index: 2; background: #0a4468; }
+.summary-row td {
+    background: #0a4468; font-weight: 700; color: #ffffff;
+    border-top: none;
+}
+/* 汇总行 hover 背景不变（2026-10-25 用户要求，避免浅灰底上看不清白字）；red-alert 红底白字 !important 仍优先 */
+.data-table tr.summary-row:hover td { background: #0a4468; }
+/* 汇总行增存高套格与整行同色白字（2026-10-25 用户要求，原亮金改白） */
+/* 详情页（激励积分清单）合计行保持浅蓝底深字；整表加粗（2026-10-25 用户要求） */
+#incentive-table td { font-weight: 700; }
+#incentive-table .summary-row td { background: #e8f2fc; color: #1f2937; border-top: 2px solid #0d4f7c; }
+#incentive-table .summary-row td.highlight-cell { color: #0d4f7c; }
+#incentive-table .summary-row td.highlight-cell.hl-neg { background: #c53030; color: #ffffff; }
+.summary-type { color: #ffffff; }
+.group-header { background: #0d4f7c; color: #ffffff; font-weight: 700; }
+.zb-group { margin-bottom: 20px; }
+.zb-group-title {
+    font-size: 15px; font-weight: 700; color: #0066cc; margin-bottom: 10px;
+    padding-left: 10px; border-left: 3px solid #0066cc;
+}
+.zb-badges { display: flex; flex-wrap: wrap; gap: 10px; }
+.zb-badge {
+    display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+    border-radius: 8px; font-size: 14px; transition: all 0.3s;
+}
+.zb-badge:hover { transform: scale(1.05); }
+.zb-good { background: #e6f7ee; border: 1px solid #34a853; }
+.zb-good .zb-days { color: #1e8e3e; font-weight: 700; }
+.zb-warn { background: #fef4e2; border: 1px solid #e8a13a; }
+.zb-warn .zb-days { color: #b45309; font-weight: 700; }
+.zb-bad { background: #fdecec; border: 1px solid #e03e3e; }
+.zb-bad .zb-days { color: #c53030; font-weight: 700; }
+.zb-name { color: #1f2937; font-weight: 600; }
+.metric-tabs { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.metric-btn {
+    padding: 10px 24px; border: 1px solid #cbd5e1;
+    background: #ffffff; color: #64748b;
+    border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.3s;
+}
+.metric-btn:hover { background: #e8f4fd; color: #0066cc; }
+.metric-btn.active {
+    background: linear-gradient(135deg, #0099ff, #0066cc); color: #ffffff;
+    border-color: #0099ff; box-shadow: 0 2px 8px rgba(0, 122, 204, 0.3);
+}
+.metric-panel { display: none; }
+.metric-panel.active { display: block; }
+.daily-scroll {
+    overflow-x: auto; border-radius: 10px; border: 1px solid #e2e8f0;
+    background: #ffffff; max-width: 100%;
+}
+.daily-scroll::-webkit-scrollbar { height: 8px; }
+.daily-scroll::-webkit-scrollbar-track { background: #eef2f7; }
+.daily-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+.daily-scroll::-webkit-scrollbar-thumb:hover { background: #64748b; }
+.daily-table {
+    border-collapse: separate; border-spacing: 0; font-size: 16px; white-space: nowrap; table-layout: fixed; width: 100%;
+}
+.daily-table th, .daily-table td { padding: 8px 6px; text-align: center; border-bottom: 1px solid #d7e3ee; border-right: 1px solid #d7e3ee; }
+.daily-table th:last-child, .daily-table td:last-child { border-right: none; }
+.daily-table thead th { position: sticky; top: 0; z-index: 1; background: #0d4f7c; color: #ffffff; font-weight: 700; }
+.daily-table .col-type { position: sticky; left: 0; z-index: 2; background: #0d4f7c; width: 40px; vertical-align: middle; }
+.daily-table .col-name { position: sticky; left: 40px; z-index: 2; background: #0d4f7c; width: 80px; }
+.daily-table .col-total { position: sticky; left: 120px; z-index: 2; background: #0d4f7c; width: 56px; }
+.daily-table thead .col-type { position: sticky; top: 0; left: 0; z-index: 4; background: #0a4468; }
+.daily-table thead .col-name { position: sticky; top: 0; left: 40px; z-index: 4; background: #0a4468; }
+.daily-table thead .col-total { position: sticky; top: 0; left: 120px; z-index: 4; background: #0a4468; }
+.daily-table .col-name { font-weight: 600; text-align: center; }
+.daily-table thead .col-name { color: #ffffff; }
+.col-total { font-weight: 700; text-align: center; }
+.daily-table thead .col-total { color: #ffd700; }
+.col-day { width: auto; }
+.has-data { color: #1e8e3e; font-weight: 600; background: #e6f7ee; }
+.no-data { color: #cbd5e1; }
+/* 2026-10-13：激励积分详情页 rowspan 合并版中，同客户组内行的激励积分格会被 td:last-child{border-right:none} 误伤
+（组内行仅 3 格，last-child 落在逻辑第 5 列而非表尾），此规则恢复其右边框，保证汇总合并块左边界竖线不缺 */
+.data-table td.mid-pts { border-right: 1px solid #d7e3ee; }
+.red-alert { background: rgba(255, 48, 66, 0.85) !important; color: #ffffff; font-weight: 800; }
+.daily-table tr:hover td.red-alert { background: rgba(255, 48, 66, 0.95) !important; }
+.daily-table tr:hover td { background: #eaf3fb; }
+.daily-table tr:hover td.has-data { background: #d5f0e0; }
+.daily-table tr:hover td.col-type, .daily-table tr:hover td.col-name, .daily-table tr:hover td.col-total { background: #0a4468; }
+.total-pq { color: #ffffff; }
+.total-zw { color: #ffffff; }
+/* 日破零装维行白底格与业务/动作表装维浅橙底一致（2026-10-25）；有数据绿格/红底警示格不动 */
+.daily-table tr.row-zw td.no-data { background: #ffedd5; }
+.legend { display: flex; gap: 16px; margin-bottom: 10px; font-size: 12px; color: #64748b; justify-content: flex-start; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+.back-link { display: inline-block; padding: 8px 20px; background: #e8f4fd; border: 1px solid #b3dcf7; border-radius: 8px; color: #0066cc; text-decoration: none; font-weight: 600; margin-bottom: 20px; transition: all 0.3s; }
+.back-link:hover { background: #d7ecfb; }
+@media (max-width: 1200px) {
+    .header h1 { font-size: 38px; letter-spacing: 4px; }
+    .top3-rank { font-size: 32px; }
+    .bottom-rank { font-size: 32px; }
+    .top3-name, .top3-value, .bottom-name, .bottom-value { font-size: 32px; }
+    .rank-card { padding: 12px; }
+    .section { margin-bottom: 28px; }
+}
+@media (max-width: 1024px) {
+    body { padding: 14px; }
+    .header h1 { font-size: 32px; letter-spacing: 4px; }
+    .section-title { font-size: 18px; }
+    .rank-panel.active { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+@media (max-width: 768px) {
+    body { padding: 12px; }
+    .container { padding-bottom: 40px; }
+    .header { padding: 20px 10px 14px; }
+    .header h1 { font-size: 24px; letter-spacing: 3px; }
+    .timestamps { flex-wrap: wrap; gap: 8px; font-size: 12px; }
+    .timestamps span { padding: 4px 12px; }
+    .section { margin-bottom: 22px; }
+    .section-title { font-size: 16px; flex-wrap: wrap; }
+    .section-sub { font-size: 11px; }
+    .tab-btn { padding: 8px 18px; font-size: 13px; }
+    .rank-panel.active { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .rank-card { padding: 10px; }
+    .rank-card-title { font-size: 16px; margin-bottom: 8px; }
+    .top3-item { height: auto; padding: 5px 10px; gap: 8px; min-height: 38px; justify-content: flex-start; }
+    .top3-info { flex-direction: column; gap: 0; align-items: flex-start; }
+    .top3-rank { font-size: 26px; min-width: 32px; }
+    .top3-name { font-size: 15px; margin-bottom: 2px; }
+    .top3-value { font-size: 13px; }
+    .bottom-item { height: auto; padding: 5px 10px; gap: 8px; min-height: 38px; justify-content: flex-start; }
+    .bottom-info { flex-direction: column; gap: 0; align-items: flex-start; }
+    .bottom-rank { font-size: 26px; min-width: 32px; }
+    .bottom-name { font-size: 15px; margin-bottom: 2px; }
+    .bottom-value { font-size: 13px; }
+    .data-table, .daily-table, .data-table.biz-table, .data-table.action-table { font-size: 14px; }
+    .data-table th { padding: 8px 4px; }
+    .data-table td { padding: 8px 4px; }
+    .daily-table th, .daily-table td { padding: 6px 4px; }
+    td.type-cell-pq, td.type-cell-zw { font-size: 14px; }
+    .v-text { letter-spacing: 4px; }
+    .zb-badge { padding: 6px 10px; font-size: 12px; }
+    .zb-badges { gap: 6px; }
+}
+
+.search-box { margin-bottom: 16px; }
+.search-input {
+    width: 100%; max-width: 500px; padding: 12px 20px;
+    background: #ffffff; border: 1px solid #cbd5e1;
+    border-radius: 8px; color: #1f2937; font-size: 15px; outline: none;
+}
+.search-input:focus { border-color: #0099ff; box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.12); }
+.search-input::placeholder { color: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back-link" href="./">&larr; 返回龙虎榜</a>
+    <div class="header">
+        <div class="title-wrap">
+        <h1>陈学贤 激励积分清单</h1>
+        <div class="glow-line"></div>
+        </div>
+        <div class="timestamps">
+            <span>积分清单统计时间: 2026-10-31</span>
+            <select id="archive-select" aria-label="历史存档"></select>
+        </div>
+    </div>
+    <div class="section">
+        <div class="section-title">激励积分明细<span class="section-sub">（数据源: 积分清单）</span></div>
+        <div class="search-box">
+            <input class="search-input" type="text" placeholder="搜索客户姓名、客户编号、业务号码或积分描述..." oninput="filterTable(this.value)">
+        </div>
+        <div class="data-scroll">
+        <table class="data-table" id="incentive-table" style="min-width: 1000px; width: 100%; table-layout: fixed">
+            <thead><tr>
+                <th>客户姓名</th>
+                <th>客户编号</th>
+                <th>业务号码</th>
+                <th style="width: 40%">积分描述</th>
+                <th>激励积分</th>
+                <th>激励积分汇总</th>
+            </tr></thead>
+            <tbody><tr><td rowspan="4">许**</td><td rowspan="4">2020744421110000</td><td>180****5698</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未办理托收业务扣20分。</td><td class="mid-pts">-20</td><td rowspan="4" class="highlight-cell">543.58</td></tr><tr><td>ADSLD26****7866</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td><td class="mid-pts">16.58</td></tr><tr><td>180****5698</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">针对非城中村新入网单品合约和融合，非满卡扣罚50元（分）/户。</td><td class="mid-pts">-50</td></tr><tr><td>180****5698</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">重点产品（FTTR/合约）199档，激励积分为3倍礼包价值=3*199=597</td><td class="mid-pts">597</td></tr><tr><td rowspan="3">陈**</td><td rowspan="3">2020396360830000</td><td>133****8974</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新入网后付费用户未办理托收业务扣20分。</td><td class="mid-pts">-20</td><td rowspan="3" class="highlight-cell">378.75</td></tr><tr><td>133****8974</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">非FTTR/非合约129及以上，激励积分为2倍礼包价值=2*199=398</td><td class="mid-pts">398</td></tr><tr><td>ADSLD26****2803</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-1积分为0.75,本号码分摊积分为0.75,导向系数为1 T+1发放100%</td><td class="mid-pts">0.75</td></tr><tr><td rowspan="4">甘**</td><td rowspan="4">3020053145050000</td><td>ADSLD26****8831</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td><td class="mid-pts">16.58</td><td rowspan="4" class="highlight-cell">263.28</td></tr><tr><td>ADSLD26****8831</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品YD4G02-660-1-19积分为40,本号码分摊积分为20,导向系数为1 T+1发放100%</td><td class="mid-pts">20</td></tr><tr><td>138****2498</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品YD4G02-660-1-19积分为40,本号码分摊积分为20,导向系数为1 T+1发放100%</td><td class="mid-pts">20</td></tr><tr><td>138****2498</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">非礼包129及以上，激励积分2倍套餐主体积分=2*159=318,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td><td class="mid-pts">206.7</td></tr><tr class="summary-row">
+        <td>合计</td><td></td><td></td><td></td><td></td>
+        <td class="highlight-cell">1185.61</td>
+    </tr></tbody></table>
+        </div>
+    </div>
+</div>
+<script>
+function filterTable(query) {
+    query = query.trim().toLowerCase();
+    const table = document.getElementById('incentive-table');
+    const tbody = table.querySelector('tbody');
+    const rows = tbody.querySelectorAll('tr:not(.summary-row)');
+    if (!query) {
+        rows.forEach(r => r.style.display = '');
+        const summary = tbody.querySelector('.summary-row');
+        if (summary) summary.style.display = '';
+        return;
+    }
+    rows.forEach(r => r.style.display = 'none');
+    let visibleCount = 0;
+    rows.forEach(r => {
+        const cells = r.querySelectorAll('td');
+        let text = '';
+        cells.forEach(c => text += ' ' + c.textContent.toLowerCase());
+        if (text.includes(query)) {
+            r.style.display = '';
+            visibleCount++;
+        }
+    });
+    const summary = tbody.querySelector('.summary-row');
+    if (summary) summary.style.display = visibleCount > 0 ? '' : 'none';
+}
+(function() {
+    var sel = document.getElementById('archive-select');
+    if (!sel) return;
+    if (location.protocol === 'file:') return;
+    var path = location.pathname;
+    var prefix = '/longhubang-report/';
+    var idx = path.indexOf(prefix);
+    var basePath = idx >= 0 ? prefix : '/';
+    var jsonUrl = basePath + 'archives.json';
+    fetch(jsonUrl, {cache: 'no-store'})
+        .then(function(r) { if (!r.ok) throw new Error('no archives'); return r.json(); })
+        .then(function(data) {
+            var months = data.months || [];
+            if (!months.length) return;
+            var curMonth = null;
+            var m = path.match(/archive-(\d{6})\//);
+            if (m) curMonth = m[1];
+            var html = '<option value="latest"' + (curMonth ? '' : ' selected') + '>最新数据</option>';
+            months.forEach(function(ym) {
+                var y = ym.slice(0,4), mo = ym.slice(4,6);
+                var label = y + '年' + mo + '月';
+                var sel_attr = (ym === curMonth) ? ' selected' : '';
+                html += '<option value="' + ym + '"' + sel_attr + '>' + label + '</option>';
+            });
+            sel.innerHTML = html;
+            sel.style.display = 'inline-block';
+            sel.addEventListener('change', function() {
+                var v = sel.value;
+                if (v === 'latest') { location.href = basePath; }
+                else { location.href = basePath + 'archive-' + v + '/index.html'; }
+            });
+        })
+        .catch(function(e) { /* 静默隐藏 */ });
+})();
+</script>
+</body>
+</html>
