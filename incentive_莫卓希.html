@@ -156,6 +156,10 @@ body {
 .target-cell { color: #1f2937; font-weight: 600; }
 .incentive-link { color: #0d4f7c; text-decoration: underline; font-weight: 700; cursor: pointer; }
 .incentive-link:hover { text-decoration: underline; color: #0099ff; }
+/* 企微运营"其中未备注"链接（2026-11-23 需求2：下划线跳转清单页） */
+.qiwei-link { color: #0d4f7c; text-decoration: underline; font-weight: 700; cursor: pointer; }
+.qiwei-link:hover { text-decoration: underline; color: #0099ff; }
+.data-table tr td.red-alert .qiwei-link { color: #ffffff !important; }
 /* 类型/姓名列宽两个详情表统一（2026-10-09）：类型列56px、姓名列76px，sticky偏移同步56px */
 .type-col { width: 56px; min-width: 56px; }
 /* 两表均 table-layout:fixed（2026-10-09）：自动布局会把竖排类型列按文字长度撑到约94px导致56px失效并与sticky错位；固定布局其余列均分（动作表2026-10-08既有方案） */
@@ -170,7 +174,13 @@ body {
     /* 表头字号略小（td 保持 18px），保证最长 7 字表头不超过 3 行（2026-10-25 用户要求） */
     .data-table.biz-table thead th { font-size: 16px; }
 }
-.action-table { min-width: 1100px; }  /* 2026-10-15 生态执行加物管拓展列(12列)后自1000px加宽 */
+.action-table { min-width: 1400px; }  /* 2026-11-23 累计物管拓展+企微运营3列(共15列)后自1100px加宽，窄屏横向滚动 */
+/* 2026-11-23：动作表 15 列 PC≥1280px 一屏不横滑（同业务表处理：取消最小宽+内边距收紧+表头字号16px） */
+@media (min-width: 1280px) {
+    .data-table.action-table { min-width: 100%; }
+    .data-table.action-table th, .data-table.action-table td { padding: 8px 3px; }
+    .data-table.action-table thead th { font-size: 16px; }
+}
 .data-table.biz-table th.name-head, .data-table.biz-table td.name-cell,
 .data-table.action-table th.name-head, .data-table.action-table td.name-cell { width: 76px; min-width: 76px; }
 .data-table th.type-col { padding: 10px 2px; }
@@ -271,12 +281,20 @@ body {
 .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
 .back-link { display: inline-block; padding: 8px 20px; background: #e8f4fd; border: 1px solid #b3dcf7; border-radius: 8px; color: #0066cc; text-decoration: none; font-weight: 600; margin-bottom: 20px; transition: all 0.3s; }
 .back-link:hover { background: #d7ecfb; }
+/* 2026-11-24 修复：排名卡 PC窄视口横滑——36px大字+nowrap 撑破4列grid轨道（344px>307px）
+   1500~1281 用30px+收紧间距保住4列一屏（1280实测无横滑无裁字；36px需轨道>361px即视口>1491）；
+   1275以下改2列（环境实测：媒体查询宽度=视口+1，vw=1270时断点1270不命中故取1275；1275~1279的4列轨道308px>最长卡307px仍安全）；原1200块的32px字号规则删除避免回弹 */
+@media (max-width: 1500px) {
+    .rank-card { min-width: 0; padding: 10px; }
+    .rank-panel.active { gap: 8px; }
+    .top3-rank, .bottom-rank { font-size: 30px; min-width: 32px; }
+    .top3-name, .top3-value, .bottom-name, .bottom-value { font-size: 30px; }
+}
+@media (max-width: 1275px) {
+    .rank-panel.active { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 1200px) {
     .header h1 { font-size: 38px; letter-spacing: 4px; }
-    .top3-rank { font-size: 32px; }
-    .bottom-rank { font-size: 32px; }
-    .top3-name, .top3-value, .bottom-name, .bottom-value { font-size: 32px; }
-    .rank-card { padding: 12px; }
     .section { margin-bottom: 28px; }
 }
 @media (max-width: 1024px) {
@@ -338,7 +356,7 @@ body {
         <div class="glow-line"></div>
         </div>
         <div class="timestamps">
-            <span>积分清单统计时间: 2026-11-17</span>
+            <span>积分清单统计时间: 2026-11-22</span>
             <select id="archive-select" aria-label="历史存档"></select>
         </div>
     </div>
