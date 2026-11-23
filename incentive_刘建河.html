@@ -156,6 +156,10 @@ body {
 .target-cell { color: #1f2937; font-weight: 600; }
 .incentive-link { color: #0d4f7c; text-decoration: underline; font-weight: 700; cursor: pointer; }
 .incentive-link:hover { text-decoration: underline; color: #0099ff; }
+/* 企微运营"其中未备注"链接（2026-11-23 需求2：下划线跳转清单页） */
+.qiwei-link { color: #0d4f7c; text-decoration: underline; font-weight: 700; cursor: pointer; }
+.qiwei-link:hover { text-decoration: underline; color: #0099ff; }
+.data-table tr td.red-alert .qiwei-link { color: #ffffff !important; }
 /* 类型/姓名列宽两个详情表统一（2026-10-09）：类型列56px、姓名列76px，sticky偏移同步56px */
 .type-col { width: 56px; min-width: 56px; }
 /* 两表均 table-layout:fixed（2026-10-09）：自动布局会把竖排类型列按文字长度撑到约94px导致56px失效并与sticky错位；固定布局其余列均分（动作表2026-10-08既有方案） */
@@ -170,7 +174,13 @@ body {
     /* 表头字号略小（td 保持 18px），保证最长 7 字表头不超过 3 行（2026-10-25 用户要求） */
     .data-table.biz-table thead th { font-size: 16px; }
 }
-.action-table { min-width: 1100px; }  /* 2026-10-15 生态执行加物管拓展列(12列)后自1000px加宽 */
+.action-table { min-width: 1400px; }  /* 2026-11-23 累计物管拓展+企微运营3列(共15列)后自1100px加宽，窄屏横向滚动 */
+/* 2026-11-23：动作表 15 列 PC≥1280px 一屏不横滑（同业务表处理：取消最小宽+内边距收紧+表头字号16px） */
+@media (min-width: 1280px) {
+    .data-table.action-table { min-width: 100%; }
+    .data-table.action-table th, .data-table.action-table td { padding: 8px 3px; }
+    .data-table.action-table thead th { font-size: 16px; }
+}
 .data-table.biz-table th.name-head, .data-table.biz-table td.name-cell,
 .data-table.action-table th.name-head, .data-table.action-table td.name-cell { width: 76px; min-width: 76px; }
 .data-table th.type-col { padding: 10px 2px; }
@@ -271,12 +281,20 @@ body {
 .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
 .back-link { display: inline-block; padding: 8px 20px; background: #e8f4fd; border: 1px solid #b3dcf7; border-radius: 8px; color: #0066cc; text-decoration: none; font-weight: 600; margin-bottom: 20px; transition: all 0.3s; }
 .back-link:hover { background: #d7ecfb; }
+/* 2026-11-24 修复：排名卡 PC窄视口横滑——36px大字+nowrap 撑破4列grid轨道（344px>307px）
+   1500~1281 用30px+收紧间距保住4列一屏（1280实测无横滑无裁字；36px需轨道>361px即视口>1491）；
+   1275以下改2列（环境实测：媒体查询宽度=视口+1，vw=1270时断点1270不命中故取1275；1275~1279的4列轨道308px>最长卡307px仍安全）；原1200块的32px字号规则删除避免回弹 */
+@media (max-width: 1500px) {
+    .rank-card { min-width: 0; padding: 10px; }
+    .rank-panel.active { gap: 8px; }
+    .top3-rank, .bottom-rank { font-size: 30px; min-width: 32px; }
+    .top3-name, .top3-value, .bottom-name, .bottom-value { font-size: 30px; }
+}
+@media (max-width: 1275px) {
+    .rank-panel.active { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 1200px) {
     .header h1 { font-size: 38px; letter-spacing: 4px; }
-    .top3-rank { font-size: 32px; }
-    .bottom-rank { font-size: 32px; }
-    .top3-name, .top3-value, .bottom-name, .bottom-value { font-size: 32px; }
-    .rank-card { padding: 12px; }
     .section { margin-bottom: 28px; }
 }
 @media (max-width: 1024px) {
@@ -338,7 +356,7 @@ body {
         <div class="glow-line"></div>
         </div>
         <div class="timestamps">
-            <span>积分清单统计时间: 2026-11-17</span>
+            <span>积分清单统计时间: 2026-11-22</span>
             <select id="archive-select" aria-label="历史存档"></select>
         </div>
     </div>
@@ -357,9 +375,9 @@ body {
                 <th>激励积分</th>
                 <th>激励积分汇总</th>
             </tr></thead>
-            <tbody><tr><td rowspan="1">闫**</td><td rowspan="1">2020726485840000</td><td>ADSLD26****6636</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">T+3变为不活跃，按T+1的35%扣回激励积分</td><td class="mid-pts">-21</td><td rowspan="1" class="highlight-cell hl-neg">-21</td></tr><tr><td rowspan="1">陈**</td><td rowspan="1">3020036591740000</td><td>180****3526</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td class="mid-pts">20</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="3">曾**</td><td rowspan="3">3020022787750000</td><td>ADSLD21****2592</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">主推改高套，激励积分为提值部分60*2。</td><td class="mid-pts">120</td><td rowspan="3" class="highlight-cell">196.58</td></tr><tr><td>ADSLD21****2592</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td><td class="mid-pts">16.58</td></tr><tr><td>ADSLD21****2592</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">一户一案首推转套餐不满足31x激励积分为60。</td><td class="mid-pts">60</td></tr><tr><td rowspan="3">黄**</td><td rowspan="3">2020561112100000</td><td>ADSLD21****6984</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">主推改高套，激励积分为提值部分24*2。</td><td class="mid-pts">48</td><td rowspan="3" class="highlight-cell">94.58</td></tr><tr><td>ADSLD21****6984</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">一户一案次推，激励积分30。</td><td class="mid-pts">30</td></tr><tr><td>ADSLD21****6984</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td><td class="mid-pts">16.58</td></tr><tr><td rowspan="1">朱**</td><td rowspan="1">3020054913160000</td><td>ADSLD25****1720</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">为提升包区拆挽上门的积极性，针对拆挽工单设置上门动作激励15分（元）/单</td><td class="mid-pts">15</td><td rowspan="1" class="highlight-cell">15</td></tr><tr><td rowspan="4">赖**</td><td rowspan="4">2020413680300000</td><td>ADSLD21****6114</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">主推改高套，激励积分为提值部分100*2。</td><td class="mid-pts">200</td><td rowspan="4" class="highlight-cell">348.25</td></tr><tr><td>ADSLD21****6114</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">一户一案顺销，激励积分60。</td><td class="mid-pts">60</td></tr><tr><td>ADSLD21****6114</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td><td class="mid-pts">8.25</td></tr><tr><td>ADSLD21****6114</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">一户一案首推，激励积分80。</td><td class="mid-pts">80</td></tr><tr><td rowspan="1">张**</td><td rowspan="1">2020769711960000</td><td>180****4811</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">基础价值积分为59,激励积分为1倍基础价值积分T+1发放100%,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td><td class="mid-pts">38.35</td><td rowspan="1" class="highlight-cell">38.35</td></tr><tr class="summary-row">
+            <tbody><tr><td rowspan="1">闫**</td><td rowspan="1">2020726485840000</td><td>ADSLD26****6636</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">T+3变为不活跃，按T+1的35%扣回激励积分</td><td class="mid-pts">-21</td><td rowspan="1" class="highlight-cell hl-neg">-21</td></tr><tr><td rowspan="1">陈**</td><td rowspan="1">3020036591740000</td><td>180****3526</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">新装副卡T+2/3高活跃（主叫语音≥50分钟或流量＞1G）,激励积分20。</td><td class="mid-pts">20</td><td rowspan="1" class="highlight-cell">20</td></tr><tr><td rowspan="4">赖**</td><td rowspan="4">2020413680300000</td><td>ADSLD21****6114</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">一户一案首推，激励积分80。</td><td class="mid-pts">80</td><td rowspan="4" class="highlight-cell">348.25</td></tr><tr><td>ADSLD21****6114</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">主推改高套，激励积分为提值部分100*2。</td><td class="mid-pts">200</td></tr><tr><td>ADSLD21****6114</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">一户一案顺销，激励积分60。</td><td class="mid-pts">60</td></tr><tr><td>ADSLD21****6114</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td><td class="mid-pts">8.25</td></tr><tr><td rowspan="3">邓**</td><td rowspan="3">3020033521330000</td><td>ADSL****5458</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">一户一案次推，激励积分30。</td><td class="mid-pts">30</td><td rowspan="3" class="highlight-cell">84.25</td></tr><tr><td>ADSL****5458</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-4积分为8.25,本号码分摊积分为8.25,导向系数为1 T+1发放100%</td><td class="mid-pts">8.25</td></tr><tr><td>ADSL****5458</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">主推改高套，激励积分为提值部分23*2。</td><td class="mid-pts">46</td></tr><tr><td rowspan="3">曾**</td><td rowspan="3">3020022787750000</td><td>ADSLD21****2592</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">一户一案首推转套餐不满足31x激励积分为60。</td><td class="mid-pts">60</td><td rowspan="3" class="highlight-cell">196.58</td></tr><tr><td>ADSLD21****2592</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">主推改高套，激励积分为提值部分60*2。</td><td class="mid-pts">120</td></tr><tr><td>ADSLD21****2592</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td><td class="mid-pts">16.58</td></tr><tr><td rowspan="3">黄**</td><td rowspan="3">2020561112100000</td><td>ADSLD21****6984</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">一户一案次推，激励积分30。</td><td class="mid-pts">30</td><td rowspan="3" class="highlight-cell">94.58</td></tr><tr><td>ADSLD21****6984</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">主推改高套，激励积分为提值部分24*2。</td><td class="mid-pts">48</td></tr><tr><td>ADSLD21****6984</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">销售品DM0001-734-1-5积分为16.58,本号码分摊积分为16.58,导向系数为1 T+1发放100%</td><td class="mid-pts">16.58</td></tr><tr><td rowspan="1">张**</td><td rowspan="1">2020769711960000</td><td>180****4811</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">基础价值积分为59,激励积分为1倍基础价值积分T+1发放100%,针对不活跃移动或宽带用户，结算标准在原来基础上按65%结算。</td><td class="mid-pts">38.35</td><td rowspan="1" class="highlight-cell">38.35</td></tr><tr><td rowspan="1">朱**</td><td rowspan="1">3020054913160000</td><td>ADSLD25****1720</td><td style="text-align:left;white-space:normal;word-break:break-all;overflow-wrap:break-word;line-height:1.4">为提升包区拆挽上门的积极性，针对拆挽工单设置上门动作激励15分（元）/单</td><td class="mid-pts">15</td><td rowspan="1" class="highlight-cell">15</td></tr><tr class="summary-row">
         <td>合计</td><td></td><td></td><td></td><td></td>
-        <td class="highlight-cell">691.76</td>
+        <td class="highlight-cell">776.01</td>
     </tr></tbody></table>
         </div>
     </div>
