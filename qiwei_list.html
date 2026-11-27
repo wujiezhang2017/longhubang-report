@@ -199,11 +199,12 @@ body {
 /* 汇总行 hover 背景不变（2026-10-25 用户要求，避免浅灰底上看不清白字）；red-alert 红底白字 !important 仍优先 */
 .data-table tr.summary-row:hover td { background: #0a4468; }
 /* 汇总行增存高套格与整行同色白字（2026-10-25 用户要求，原亮金改白） */
-/* 详情页（激励积分清单）合计行保持浅蓝底深字；整表加粗（2026-10-25 用户要求） */
-#incentive-table td { font-weight: 700; }
-#incentive-table .summary-row td { background: #e8f2fc; color: #1f2937; border-top: 2px solid #0d4f7c; }
-#incentive-table .summary-row td.highlight-cell { color: #0d4f7c; }
-#incentive-table .summary-row td.highlight-cell.hl-neg { background: #c53030; color: #ffffff; }
+/* 详情页（激励积分清单）合计行保持浅蓝底深字；整表加粗（2026-10-25 用户要求）
+   2026-11-27 需求1：合并单页每人表格用 class .inc-table（不再有唯一 #incentive-table） */
+#incentive-table td, .inc-table td { font-weight: 700; }
+#incentive-table .summary-row td, .inc-table .summary-row td { background: #e8f2fc; color: #1f2937; border-top: 2px solid #0d4f7c; }
+#incentive-table .summary-row td.highlight-cell, .inc-table .summary-row td.highlight-cell { color: #0d4f7c; }
+#incentive-table .summary-row td.highlight-cell.hl-neg, .inc-table .summary-row td.highlight-cell.hl-neg { background: #c53030; color: #ffffff; }
 .summary-type { color: #ffffff; }
 .group-header { background: #0d4f7c; color: #ffffff; font-weight: 700; }
 .zb-group { margin-bottom: 20px; }
